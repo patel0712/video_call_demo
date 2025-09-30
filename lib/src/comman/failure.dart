@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable {
-
   const Failure(this.message);
   final String message;
 
@@ -23,4 +22,11 @@ class DatabaseFailure extends Failure {
 
 class CacheFailure extends Failure {
   const CacheFailure(String message) : super(message);
+}
+
+// Factory methods for common failures
+extension FailureFactory on Failure {
+  static Failure serverError(String message) => ServerFailure(message);
+  static Failure noInternetConnection() =>
+      ConnectionFailure('No internet connection');
 }

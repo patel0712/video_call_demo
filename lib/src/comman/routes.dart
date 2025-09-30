@@ -25,6 +25,14 @@ class AppRoutes {
   static const String DASHBOARD_ROUTE_NAME = 'dashboard';
   static const String DASHBOARD_ROUTE_PATH = '/dashboard';
 
+  // Video Call routes
+  static const String VIDEO_CALL_ROUTE_NAME = 'video_call';
+  static const String VIDEO_CALL_ROUTE_PATH = '/video_call';
+
+  // User List routes
+  static const String USER_LIST_ROUTE_NAME = 'user_list';
+  static const String USER_LIST_ROUTE_PATH = '/user_list';
+
   // create task routes
   static const String TASK_TITLE_ROUTE_NAME = 'task_title';
   static const String TASK_TITLE_ROUTE_PATH = '/task_title';

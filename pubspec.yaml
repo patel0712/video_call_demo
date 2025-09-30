@@ -1,10 +1,10 @@
 name: bloc_clean_architecture
-description: A new Flutter project.
+description: A Flutter video calling app with AWS Chime SDK integration, authentication, and user management.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -25,6 +25,12 @@ dependencies:
   logger: ^2.3.0
   font_awesome_flutter: ^10.7.0
   bloc_concurrency: ^0.2.5
+  # Video calling dependencies
+  flutter_aws_chime: ^1.0.0
+  permission_handler: ^11.0.1
+  cached_network_image: ^3.3.0
+  connectivity_plus: ^5.0.1
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +41,8 @@ dev_dependencies:
   bloc_test: ^9.0.0
   build_runner: ^2.4.6
   mockito: ^5.4.4
+  json_serializable: ^6.7.1
+  freezed: ^2.4.7
 
 
 flutter:
