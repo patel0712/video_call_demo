@@ -1,11 +1,11 @@
 import 'package:bloc_clean_architecture/src/comman/enum.dart';
 import 'package:bloc_clean_architecture/src/presentation/bloc/video_call/video_call_bloc.dart';
+import 'package:bloc_clean_architecture/src/presentation/page/video_call/chime_meeting_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_aws_chime/models/join_info.model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_aws_chime/views/meeting.view.dart';
-import 'package:flutter_aws_chime/models/join_info.model.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String? meetingId;
@@ -111,6 +111,36 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     context.read<VideoCallBloc>().add(SetScreenShareEnabled(!_isScreenSharing));
   }
 
+  void _showAudioDeviceDialog() async {
+    final state = context.read<VideoCallBloc>().state;
+    final String? device = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text("Choose Audio Device"),
+        children: state.audioDevices.map((device) {
+          final isSelected = device == state.selectedAudioDevice;
+          return SimpleDialogOption(
+            child: Text(
+              device,
+              style: TextStyle(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context, device);
+              context.read<VideoCallBloc>().add(UpdateAudioDevice(device));
+            },
+          );
+        }).toList(),
+      ),
+    );
+
+    if (device == null) {
+      debugPrint("No device chosen.");
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,12 +205,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           }
         },
         builder: (context, state) {
-          // If connected and we have JoinInfo, render MeetingView
+          // If connected and we have JoinInfo, render ChimeMeetingWrapper
           if (state.isConnected && state.joinInfo != null) {
-            debugPrint(
-              'Rendering MeetingView with JoinInfo: ${state.joinInfo}',
-            );
-            return MeetingView(state.joinInfo as JoinInfo);
+            debugPrint('🎬 Rendering ChimeMeetingWrapper with JoinInfo');
+            return ChimeMeetingWrapper(joinInfo: state.joinInfo! as JoinInfo);
           }
 
           debugPrint(
@@ -456,6 +484,16 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                               ? Colors.white
                               : Colors.black,
                           onPressed: _toggleScreenShare,
+                          isEnabled: _isConnected,
+                        ),
+
+                        // Audio device selection
+                        _buildControlButton(
+                          icon: Icons.settings_voice,
+                          label: 'Audio',
+                          backgroundColor: Colors.white,
+                          iconColor: Colors.black,
+                          onPressed: _showAudioDeviceDialog,
                           isEnabled: _isConnected,
                         ),
                       ],

@@ -26,6 +26,9 @@ class AppRoutes {
   static const String DASHBOARD_ROUTE_PATH = '/dashboard';
 
   // Video Call routes
+  static const String MEETING_INPUT_ROUTE_NAME = 'meeting_input';
+  static const String MEETING_INPUT_ROUTE_PATH = '/meeting_input';
+
   static const String VIDEO_CALL_ROUTE_NAME = 'video_call';
   static const String VIDEO_CALL_ROUTE_PATH = '/video_call';
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_aws_chime/models/join_info.model.dart';
 
 class ChimeApiResponse {
@@ -19,34 +20,55 @@ class ChimeApiResponse {
 
   // Convert to JoinInfo for the AWS Chime SDK
   JoinInfo toJoinInfo() {
-    // Create the JoinInfo object that AWS Chime SDK expects
-    return JoinInfo.fromJson({
-      'Meeting': {
-        'MeetingId': meeting.meetingId,
-        'ExternalMeetingId': meeting.externalMeetingId,
-        'MediaRegion': meeting.mediaRegion,
-        'MediaPlacement': {
-          'AudioHostUrl': meeting.mediaPlacement.audioHostUrl,
-          'AudioFallbackUrl': meeting.mediaPlacement.audioFallbackUrl,
-          'SignalingUrl': meeting.mediaPlacement.signalingUrl,
-          'TurnControlUrl': meeting.mediaPlacement.turnControlUrl,
-          'ScreenDataUrl': meeting.mediaPlacement.screenDataUrl,
-          'ScreenViewingUrl': meeting.mediaPlacement.screenViewingUrl,
-          'ScreenSharingUrl': meeting.mediaPlacement.screenSharingUrl,
-          'EventIngestionUrl': meeting.mediaPlacement.eventIngestionUrl,
+    try {
+      // Create the JSON structure that AWS Chime SDK expects
+      final joinInfoJson = {
+        'meeting': {
+          'MeetingId': meeting.meetingId,
+          'ExternalMeetingId': meeting.externalMeetingId,
+          'MediaRegion': meeting.mediaRegion,
+          'MediaPlacement': {
+            'AudioHostUrl': meeting.mediaPlacement.audioHostUrl,
+            'AudioFallbackUrl': meeting.mediaPlacement.audioFallbackUrl,
+            'SignalingUrl': meeting.mediaPlacement.signalingUrl,
+            'TurnControlUrl': meeting.mediaPlacement.turnControlUrl,
+            'ScreenDataUrl': meeting.mediaPlacement.screenDataUrl,
+            'ScreenViewingUrl': meeting.mediaPlacement.screenViewingUrl,
+            'ScreenSharingUrl': meeting.mediaPlacement.screenSharingUrl,
+            'EventIngestionUrl': meeting.mediaPlacement.eventIngestionUrl,
+          },
         },
-      },
-      'Attendee': {
-        'ExternalUserId': attendee.externalUserId,
-        'AttendeeId': attendee.attendeeId,
-        'JoinToken': attendee.joinToken,
-        'Capabilities': {
-          'Audio': attendee.capabilities.audio,
-          'Video': attendee.capabilities.video,
-          'Content': attendee.capabilities.content,
+        'attendee': {
+          'ExternalUserId': attendee.externalUserId,
+          'AttendeeId': attendee.attendeeId,
+          'JoinToken': attendee.joinToken,
+          'Capabilities': {
+            'Audio': attendee.capabilities.audio,
+            'Video': attendee.capabilities.video,
+            'Content': attendee.capabilities.content,
+          },
         },
-      },
-    });
+      };
+
+      debugPrint('📄 Creating JoinInfo with JSON: $joinInfoJson');
+      debugPrint('🔍 meeting (lowercase): ${joinInfoJson['meeting']}');
+      debugPrint('🔍 attendee (lowercase): ${joinInfoJson['attendee']}');
+      debugPrint(
+        '🔍 Capabilities: ${joinInfoJson['attendee']!['Capabilities']}',
+      );
+
+      return JoinInfo.fromJson(joinInfoJson);
+    } catch (e, stackTrace) {
+      debugPrint('❌ Error creating JoinInfo: $e');
+      debugPrint('📚 Stack trace: $stackTrace');
+      debugPrint(
+        '🔍 Meeting data: meetingId=${meeting.meetingId}, externalId=${meeting.externalMeetingId}',
+      );
+      debugPrint(
+        '🔍 Attendee data: attendeeId=${attendee.attendeeId}, externalUserId=${attendee.externalUserId}',
+      );
+      rethrow;
+    }
   }
 }
 
@@ -162,13 +184,20 @@ class Attendee {
   });
 
   factory Attendee.fromJson(Map<String, dynamic> json) {
+    // AWS Chime SDK may not always return Capabilities, so provide defaults
+    final capabilitiesJson = json['Capabilities'] as Map<String, dynamic>?;
+
     return Attendee(
       externalUserId: json['ExternalUserId'] as String,
       attendeeId: json['AttendeeId'] as String,
       joinToken: json['JoinToken'] as String,
-      capabilities: Capabilities.fromJson(
-        json['Capabilities'] as Map<String, dynamic>,
-      ),
+      capabilities: capabilitiesJson != null
+          ? Capabilities.fromJson(capabilitiesJson)
+          : Capabilities(
+              audio: 'SendReceive',
+              video: 'SendReceive',
+              content: 'SendReceive',
+            ),
     );
   }
 

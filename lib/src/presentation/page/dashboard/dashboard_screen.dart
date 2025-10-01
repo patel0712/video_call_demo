@@ -93,7 +93,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       subtitle: 'Start a call',
                       color: Colors.green,
                       onTap: () {
-                        context.pushNamed(AppRoutes.VIDEO_CALL_ROUTE_NAME);
+                        context.pushNamed(AppRoutes.MEETING_INPUT_ROUTE_NAME);
                       },
                     ),
                     _buildFeatureCard(

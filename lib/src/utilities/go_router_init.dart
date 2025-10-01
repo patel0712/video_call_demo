@@ -5,6 +5,7 @@ import 'package:bloc_clean_architecture/src/presentation/page/dashboard/dashboar
 import 'package:bloc_clean_architecture/src/presentation/page/error/error_screen.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/splash/splash_screen.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/user_list/user_list_screen.dart';
+import 'package:bloc_clean_architecture/src/presentation/page/video_call/meeting_input_screen.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/video_call/video_call_screen.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/video_call/video_call_debug_screen.dart';
 import 'package:bloc_clean_architecture/src/utilities/logger.dart';
@@ -65,8 +66,19 @@ GoRouter routerinit = GoRouter(
     ),
 
     ///  =================================================================
-    /// ********************** Video Call Route ******************************
+    /// ********************** Video Call Routes ******************************
     /// ==================================================================
+
+    // Meeting Input Screen - where users enter meeting details
+    GoRoute(
+      name: AppRoutes.MEETING_INPUT_ROUTE_NAME,
+      path: AppRoutes.MEETING_INPUT_ROUTE_PATH,
+      builder: (BuildContext context, GoRouterState state) {
+        return const MeetingInputScreen();
+      },
+    ),
+
+    // Video Call Screen - the actual video call interface
     GoRoute(
       name: AppRoutes.VIDEO_CALL_ROUTE_NAME,
       path: AppRoutes.VIDEO_CALL_ROUTE_PATH,

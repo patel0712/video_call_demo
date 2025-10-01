@@ -1,5 +1,4 @@
 import 'package:bloc_clean_architecture/src/comman/api.dart';
-import 'package:bloc_clean_architecture/src/data/models/chime_response_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_aws_chime/models/join_info.model.dart';
@@ -61,23 +60,45 @@ class ChimeVideoCallRemoteDataSource implements VideoCallRemoteDataSource {
       debugPrint("Raw API response =====> ${response.data}");
 
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
-        // Parse the response using our model
-        final chimeResponse = ChimeApiResponse.fromJson(
-          response.data as Map<String, dynamic>,
-        );
+        debugPrint("Raw API response =====> ${response.data}");
 
-        debugPrint('Meeting ID: ${chimeResponse.meeting.meetingId}');
-        debugPrint('Attendee ID: ${chimeResponse.attendee.attendeeId}');
-        debugPrint(
-          'External User ID: ${chimeResponse.attendee.externalUserId}',
-        );
+        if (response.statusCode == 200 &&
+            response.data is Map<String, dynamic>) {
+          final data = response.data as Map<String, dynamic>;
+          final meeting = data['Meeting'] as Map<String, dynamic>;
+          final attendee = data['Attendee'] as Map<String, dynamic>;
 
-        // Convert to JoinInfo for the AWS Chime SDK
-        final joinInfo = chimeResponse.toJoinInfo();
-        debugPrint('Created JoinInfo successfully');
-        debugPrint('JoinInfo JSON: ${joinInfo.toJson()}');
+          final joinInfo = JoinInfo(
+            MeetingInfo.fromJson({
+              'MeetingId': meeting['MeetingId'],
+              'ExternalMeetingId': meeting['ExternalMeetingId'],
+              'MediaRegion': meeting['MediaRegion'],
+              'MediaPlacement': {
+                "AudioFallbackUrl":
+                    meeting['MediaPlacement']['AudioFallbackUrl'],
+                "AudioHostUrl": meeting['MediaPlacement']['AudioHostUrl'],
+                "EventIngestionUrl":
+                    meeting['MediaPlacement']['EventIngestionUrl'],
+                "ScreenDataUrl": meeting['MediaPlacement']['ScreenDataUrl'],
+                "ScreenSharingUrl":
+                    meeting['MediaPlacement']['ScreenSharingUrl'],
+                "ScreenViewingUrl":
+                    meeting['MediaPlacement']['ScreenViewingUrl'],
+                "SignalingUrl": meeting['MediaPlacement']['SignalingUrl'],
+                "TurnControlUrl": meeting['MediaPlacement']['TurnControlUrl'],
+              },
+            }),
+            AttendeeInfo.fromJson({
+              "AttendeeId": attendee['AttendeeId'],
+              "ExternalUserId": attendee['ExternalUserId'],
+              "JoinToken": attendee['JoinToken'],
+            }),
+          );
 
-        return joinInfo;
+          return joinInfo;
+        } else {
+          throw Exception("Failed to join meeting: ${response.statusCode}");
+        }
       }
 
       throw Exception(

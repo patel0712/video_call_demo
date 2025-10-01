@@ -32,3 +32,52 @@ class SetScreenShareEnabled extends VideoCallEvent {
   const SetScreenShareEnabled(this.enable);
   final bool enable;
 }
+
+// AWS Chime specific events
+class UpdateAudioDevice extends VideoCallEvent {
+  const UpdateAudioDevice(this.deviceName);
+  final String deviceName;
+}
+
+class ListAudioDevices extends VideoCallEvent {
+  const ListAudioDevices();
+}
+
+class AttendeeJoined extends VideoCallEvent {
+  const AttendeeJoined({
+    required this.attendeeId,
+    required this.externalUserId,
+  });
+  final String attendeeId;
+  final String externalUserId;
+}
+
+class AttendeeLeft extends VideoCallEvent {
+  const AttendeeLeft({
+    required this.attendeeId,
+    required this.externalUserId,
+    this.didDrop = false,
+  });
+  final String attendeeId;
+  final String externalUserId;
+  final bool didDrop;
+}
+
+class VideoTileAdded extends VideoCallEvent {
+  const VideoTileAdded({
+    required this.attendeeId,
+    required this.tileId,
+    required this.isLocal,
+    required this.isScreenShare,
+  });
+  final String attendeeId;
+  final int tileId;
+  final bool isLocal;
+  final bool isScreenShare;
+}
+
+class VideoTileRemoved extends VideoCallEvent {
+  const VideoTileRemoved({required this.attendeeId, required this.tileId});
+  final String attendeeId;
+  final int tileId;
+}

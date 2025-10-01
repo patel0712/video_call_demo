@@ -115,109 +115,114 @@ class _VideoCallDebugScreenState extends State<VideoCallDebugScreen> {
             )
           : Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Video Call Integration Debug',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'This screen helps debug the integration with flutter_aws_chime package.',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 24),
-
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Test Steps:',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            '1. Create JoinInfo from your API response data',
-                          ),
-                          const Text('2. Verify JoinInfo object is valid'),
-                          const Text('3. Test MeetingView rendering'),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: _createTestJoinInfo,
-                            child: const Text(
-                              'Create Test JoinInfo & Show MeetingView',
-                            ),
-                          ),
-                        ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Video Call Integration Debug',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'This screen helps debug the integration with flutter_aws_chime package.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
 
-                  const SizedBox(height: 16),
-
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Your API Response Data:',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Test Steps:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Meeting ID: 9503c56c-5e07-4881-90dd-e1c7cdcb2713\n'
-                            'External Meeting ID: test-meeting-123\n'
-                            'Attendee: Bob\n'
-                            'Region: us-east-1',
-                            style: TextStyle(fontFamily: 'monospace'),
-                          ),
-                        ],
+                            const SizedBox(height: 8),
+                            const Text(
+                              '1. Create JoinInfo from your API response data',
+                            ),
+                            const Text('2. Verify JoinInfo object is valid'),
+                            const Text('3. Test MeetingView rendering'),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: _createTestJoinInfo,
+                              child: const Text(
+                                'Create Test JoinInfo & Show MeetingView',
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                  Card(
-                    color: Colors.orange.withOpacity(0.1),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Expected Behavior:',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Your API Response Data:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          Text('✅ JoinInfo should be created without errors'),
-                          Text(
-                            '✅ MeetingView should render video calling interface',
-                          ),
-                          Text('✅ You should see camera/microphone controls'),
-                          Text(
-                            '✅ Video calling should work between two devices',
-                          ),
-                        ],
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Meeting ID: 9503c56c-5e07-4881-90dd-e1c7cdcb2713\n'
+                              'External Meeting ID: test-meeting-123\n'
+                              'Attendee: Bob\n'
+                              'Region: us-east-1',
+                              style: TextStyle(fontFamily: 'monospace'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: 16),
+
+                    Card(
+                      color: Colors.orange.withOpacity(0.1),
+                      child: const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Expected Behavior:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text('✅ JoinInfo should be created without errors'),
+                            Text(
+                              '✅ MeetingView should render video calling interface',
+                            ),
+                            Text('✅ You should see camera/microphone controls'),
+                            Text(
+                              '✅ Video calling should work between two devices',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );

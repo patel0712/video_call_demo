@@ -15,5 +15,5 @@ class ApiConstants {
   static const String awsChimeAndroidEmulator = 'http://10.0.2.2:5000';
 
   // Use localhost for iOS simulator or desktop
-  static const String awsChimeLocalhost = 'http://192.168.20.115:5000';
+  static const String awsChimeLocalhost = 'http://192.168.181.115:5000';
 }

@@ -11,6 +11,12 @@ class VideoCallState {
     required this.meetingId,
     required this.participantName,
     this.joinInfo,
+    this.selectedAudioDevice,
+    this.audioDevices = const [],
+    this.localAttendeeId,
+    this.remoteAttendeeId,
+    this.contentAttendeeId,
+    this.attendees = const {},
   });
 
   factory VideoCallState.initial() => const VideoCallState(
@@ -33,6 +39,12 @@ class VideoCallState {
   final String meetingId;
   final String participantName;
   final Object? joinInfo; // JoinInfo from flutter_aws_chime
+  final String? selectedAudioDevice;
+  final List<String> audioDevices;
+  final String? localAttendeeId;
+  final String? remoteAttendeeId;
+  final String? contentAttendeeId;
+  final Map<String, dynamic> attendees;
 
   VideoCallState copyWith({
     RequestState? state,
@@ -44,6 +56,12 @@ class VideoCallState {
     String? meetingId,
     String? participantName,
     Object? joinInfo,
+    String? selectedAudioDevice,
+    List<String>? audioDevices,
+    String? localAttendeeId,
+    String? remoteAttendeeId,
+    String? contentAttendeeId,
+    Map<String, dynamic>? attendees,
   }) {
     return VideoCallState(
       state: state ?? this.state,
@@ -55,6 +73,12 @@ class VideoCallState {
       meetingId: meetingId ?? this.meetingId,
       participantName: participantName ?? this.participantName,
       joinInfo: joinInfo ?? this.joinInfo,
+      selectedAudioDevice: selectedAudioDevice ?? this.selectedAudioDevice,
+      audioDevices: audioDevices ?? this.audioDevices,
+      localAttendeeId: localAttendeeId ?? this.localAttendeeId,
+      remoteAttendeeId: remoteAttendeeId ?? this.remoteAttendeeId,
+      contentAttendeeId: contentAttendeeId ?? this.contentAttendeeId,
+      attendees: attendees ?? this.attendees,
     );
   }
 }
