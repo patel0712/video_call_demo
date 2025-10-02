@@ -12,7 +12,7 @@ part of 'sign_in_form_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SignInFormEvent {
@@ -84,27 +84,34 @@ class _$SignInFormEventCopyWithImpl<$Res, $Val extends SignInFormEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$_InitialCopyWith<$Res> {
-  factory _$$_InitialCopyWith(
-          _$_Initial value, $Res Function(_$_Initial) then) =
-      __$$_InitialCopyWithImpl<$Res>;
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_InitialCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res, _$_Initial>
-    implements _$$_InitialCopyWith<$Res> {
-  __$$_InitialCopyWithImpl(_$_Initial _value, $Res Function(_$_Initial) _then)
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$SignInFormEventCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_Initial implements _Initial {
-  const _$_Initial();
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
 
   @override
   String toString() {
@@ -112,9 +119,9 @@ class _$_Initial implements _Initial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Initial);
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
   }
 
   @override
@@ -196,29 +203,32 @@ class _$_Initial implements _Initial {
 }
 
 abstract class _Initial implements SignInFormEvent {
-  const factory _Initial() = _$_Initial;
+  const factory _Initial() = _$InitialImpl;
 }
 
 /// @nodoc
-abstract class _$$_SignInWithEmailCopyWith<$Res> {
-  factory _$$_SignInWithEmailCopyWith(
-          _$_SignInWithEmail value, $Res Function(_$_SignInWithEmail) then) =
-      __$$_SignInWithEmailCopyWithImpl<$Res>;
+abstract class _$$SignInWithEmailImplCopyWith<$Res> {
+  factory _$$SignInWithEmailImplCopyWith(_$SignInWithEmailImpl value,
+          $Res Function(_$SignInWithEmailImpl) then) =
+      __$$SignInWithEmailImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_SignInWithEmailCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res, _$_SignInWithEmail>
-    implements _$$_SignInWithEmailCopyWith<$Res> {
-  __$$_SignInWithEmailCopyWithImpl(
-      _$_SignInWithEmail _value, $Res Function(_$_SignInWithEmail) _then)
+class __$$SignInWithEmailImplCopyWithImpl<$Res>
+    extends _$SignInFormEventCopyWithImpl<$Res, _$SignInWithEmailImpl>
+    implements _$$SignInWithEmailImplCopyWith<$Res> {
+  __$$SignInWithEmailImplCopyWithImpl(
+      _$SignInWithEmailImpl _value, $Res Function(_$SignInWithEmailImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_SignInWithEmail implements _SignInWithEmail {
-  const _$_SignInWithEmail();
+class _$SignInWithEmailImpl implements _SignInWithEmail {
+  const _$SignInWithEmailImpl();
 
   @override
   String toString() {
@@ -226,9 +236,9 @@ class _$_SignInWithEmail implements _SignInWithEmail {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_SignInWithEmail);
+        (other.runtimeType == runtimeType && other is _$SignInWithEmailImpl);
   }
 
   @override
@@ -310,32 +320,34 @@ class _$_SignInWithEmail implements _SignInWithEmail {
 }
 
 abstract class _SignInWithEmail implements SignInFormEvent {
-  const factory _SignInWithEmail() = _$_SignInWithEmail;
+  const factory _SignInWithEmail() = _$SignInWithEmailImpl;
 }
 
 /// @nodoc
-abstract class _$$_EmailOnChangedCopyWith<$Res> {
-  factory _$$_EmailOnChangedCopyWith(
-          _$_EmailOnChanged value, $Res Function(_$_EmailOnChanged) then) =
-      __$$_EmailOnChangedCopyWithImpl<$Res>;
+abstract class _$$EmailOnChangedImplCopyWith<$Res> {
+  factory _$$EmailOnChangedImplCopyWith(_$EmailOnChangedImpl value,
+          $Res Function(_$EmailOnChangedImpl) then) =
+      __$$EmailOnChangedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String email});
 }
 
 /// @nodoc
-class __$$_EmailOnChangedCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res, _$_EmailOnChanged>
-    implements _$$_EmailOnChangedCopyWith<$Res> {
-  __$$_EmailOnChangedCopyWithImpl(
-      _$_EmailOnChanged _value, $Res Function(_$_EmailOnChanged) _then)
+class __$$EmailOnChangedImplCopyWithImpl<$Res>
+    extends _$SignInFormEventCopyWithImpl<$Res, _$EmailOnChangedImpl>
+    implements _$$EmailOnChangedImplCopyWith<$Res> {
+  __$$EmailOnChangedImplCopyWithImpl(
+      _$EmailOnChangedImpl _value, $Res Function(_$EmailOnChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? email = null,
   }) {
-    return _then(_$_EmailOnChanged(
+    return _then(_$EmailOnChangedImpl(
       null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -346,8 +358,8 @@ class __$$_EmailOnChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EmailOnChanged implements _EmailOnChanged {
-  const _$_EmailOnChanged(this.email);
+class _$EmailOnChangedImpl implements _EmailOnChanged {
+  const _$EmailOnChangedImpl(this.email);
 
   @override
   final String email;
@@ -358,21 +370,24 @@ class _$_EmailOnChanged implements _EmailOnChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EmailOnChanged &&
+            other is _$EmailOnChangedImpl &&
             (identical(other.email, email) || other.email == email));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, email);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EmailOnChangedCopyWith<_$_EmailOnChanged> get copyWith =>
-      __$$_EmailOnChangedCopyWithImpl<_$_EmailOnChanged>(this, _$identity);
+  _$$EmailOnChangedImplCopyWith<_$EmailOnChangedImpl> get copyWith =>
+      __$$EmailOnChangedImplCopyWithImpl<_$EmailOnChangedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -450,37 +465,42 @@ class _$_EmailOnChanged implements _EmailOnChanged {
 }
 
 abstract class _EmailOnChanged implements SignInFormEvent {
-  const factory _EmailOnChanged(final String email) = _$_EmailOnChanged;
+  const factory _EmailOnChanged(final String email) = _$EmailOnChangedImpl;
 
   String get email;
-  @JsonKey(ignore: true)
-  _$$_EmailOnChangedCopyWith<_$_EmailOnChanged> get copyWith =>
+
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmailOnChangedImplCopyWith<_$EmailOnChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_PasswordOnChangedCopyWith<$Res> {
-  factory _$$_PasswordOnChangedCopyWith(_$_PasswordOnChanged value,
-          $Res Function(_$_PasswordOnChanged) then) =
-      __$$_PasswordOnChangedCopyWithImpl<$Res>;
+abstract class _$$PasswordOnChangedImplCopyWith<$Res> {
+  factory _$$PasswordOnChangedImplCopyWith(_$PasswordOnChangedImpl value,
+          $Res Function(_$PasswordOnChangedImpl) then) =
+      __$$PasswordOnChangedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String password});
 }
 
 /// @nodoc
-class __$$_PasswordOnChangedCopyWithImpl<$Res>
-    extends _$SignInFormEventCopyWithImpl<$Res, _$_PasswordOnChanged>
-    implements _$$_PasswordOnChangedCopyWith<$Res> {
-  __$$_PasswordOnChangedCopyWithImpl(
-      _$_PasswordOnChanged _value, $Res Function(_$_PasswordOnChanged) _then)
+class __$$PasswordOnChangedImplCopyWithImpl<$Res>
+    extends _$SignInFormEventCopyWithImpl<$Res, _$PasswordOnChangedImpl>
+    implements _$$PasswordOnChangedImplCopyWith<$Res> {
+  __$$PasswordOnChangedImplCopyWithImpl(_$PasswordOnChangedImpl _value,
+      $Res Function(_$PasswordOnChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? password = null,
   }) {
-    return _then(_$_PasswordOnChanged(
+    return _then(_$PasswordOnChangedImpl(
       null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
@@ -491,8 +511,8 @@ class __$$_PasswordOnChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PasswordOnChanged implements _PasswordOnChanged {
-  const _$_PasswordOnChanged(this.password);
+class _$PasswordOnChangedImpl implements _PasswordOnChanged {
+  const _$PasswordOnChangedImpl(this.password);
 
   @override
   final String password;
@@ -503,10 +523,10 @@ class _$_PasswordOnChanged implements _PasswordOnChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PasswordOnChanged &&
+            other is _$PasswordOnChangedImpl &&
             (identical(other.password, password) ||
                 other.password == password));
   }
@@ -514,11 +534,13 @@ class _$_PasswordOnChanged implements _PasswordOnChanged {
   @override
   int get hashCode => Object.hash(runtimeType, password);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PasswordOnChangedCopyWith<_$_PasswordOnChanged> get copyWith =>
-      __$$_PasswordOnChangedCopyWithImpl<_$_PasswordOnChanged>(
+  _$$PasswordOnChangedImplCopyWith<_$PasswordOnChangedImpl> get copyWith =>
+      __$$PasswordOnChangedImplCopyWithImpl<_$PasswordOnChangedImpl>(
           this, _$identity);
 
   @override
@@ -598,11 +620,14 @@ class _$_PasswordOnChanged implements _PasswordOnChanged {
 
 abstract class _PasswordOnChanged implements SignInFormEvent {
   const factory _PasswordOnChanged(final String password) =
-      _$_PasswordOnChanged;
+      _$PasswordOnChangedImpl;
 
   String get password;
-  @JsonKey(ignore: true)
-  _$$_PasswordOnChangedCopyWith<_$_PasswordOnChanged> get copyWith =>
+
+  /// Create a copy of SignInFormEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PasswordOnChangedImplCopyWith<_$PasswordOnChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -613,7 +638,9 @@ mixin _$SignInFormState {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignInFormState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SignInFormStateCopyWith<SignInFormState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -638,6 +665,8 @@ class _$SignInFormStateCopyWithImpl<$Res, $Val extends SignInFormState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SignInFormState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -668,11 +697,11 @@ class _$SignInFormStateCopyWithImpl<$Res, $Val extends SignInFormState>
 }
 
 /// @nodoc
-abstract class _$$_SignInFormStateCopyWith<$Res>
+abstract class _$$SignInFormStateImplCopyWith<$Res>
     implements $SignInFormStateCopyWith<$Res> {
-  factory _$$_SignInFormStateCopyWith(
-          _$_SignInFormState value, $Res Function(_$_SignInFormState) then) =
-      __$$_SignInFormStateCopyWithImpl<$Res>;
+  factory _$$SignInFormStateImplCopyWith(_$SignInFormStateImpl value,
+          $Res Function(_$SignInFormStateImpl) then) =
+      __$$SignInFormStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -680,13 +709,15 @@ abstract class _$$_SignInFormStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SignInFormStateCopyWithImpl<$Res>
-    extends _$SignInFormStateCopyWithImpl<$Res, _$_SignInFormState>
-    implements _$$_SignInFormStateCopyWith<$Res> {
-  __$$_SignInFormStateCopyWithImpl(
-      _$_SignInFormState _value, $Res Function(_$_SignInFormState) _then)
+class __$$SignInFormStateImplCopyWithImpl<$Res>
+    extends _$SignInFormStateCopyWithImpl<$Res, _$SignInFormStateImpl>
+    implements _$$SignInFormStateImplCopyWith<$Res> {
+  __$$SignInFormStateImplCopyWithImpl(
+      _$SignInFormStateImpl _value, $Res Function(_$SignInFormStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignInFormState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -695,7 +726,7 @@ class __$$_SignInFormStateCopyWithImpl<$Res>
     Object? email = null,
     Object? password = null,
   }) {
-    return _then(_$_SignInFormState(
+    return _then(_$SignInFormStateImpl(
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -718,8 +749,8 @@ class __$$_SignInFormStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SignInFormState implements _SignInFormState {
-  const _$_SignInFormState(
+class _$SignInFormStateImpl implements _SignInFormState {
+  const _$SignInFormStateImpl(
       {required this.state,
       required this.message,
       required this.email,
@@ -740,10 +771,10 @@ class _$_SignInFormState implements _SignInFormState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SignInFormState &&
+            other is _$SignInFormStateImpl &&
             (identical(other.state, state) || other.state == state) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.email, email) || other.email == email) &&
@@ -754,11 +785,14 @@ class _$_SignInFormState implements _SignInFormState {
   @override
   int get hashCode => Object.hash(runtimeType, state, message, email, password);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignInFormState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SignInFormStateCopyWith<_$_SignInFormState> get copyWith =>
-      __$$_SignInFormStateCopyWithImpl<_$_SignInFormState>(this, _$identity);
+  _$$SignInFormStateImplCopyWith<_$SignInFormStateImpl> get copyWith =>
+      __$$SignInFormStateImplCopyWithImpl<_$SignInFormStateImpl>(
+          this, _$identity);
 }
 
 abstract class _SignInFormState implements SignInFormState {
@@ -766,7 +800,7 @@ abstract class _SignInFormState implements SignInFormState {
       {required final RequestState state,
       required final String message,
       required final String email,
-      required final String password}) = _$_SignInFormState;
+      required final String password}) = _$SignInFormStateImpl;
 
   @override
   RequestState get state;
@@ -776,8 +810,11 @@ abstract class _SignInFormState implements SignInFormState {
   String get email;
   @override
   String get password;
+
+  /// Create a copy of SignInFormState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_SignInFormStateCopyWith<_$_SignInFormState> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SignInFormStateImplCopyWith<_$SignInFormStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
