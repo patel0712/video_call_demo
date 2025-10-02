@@ -22,21 +22,51 @@ class JoinMeeting {
 class LeaveMeeting {
   LeaveMeeting(this._repo);
   final VideoCallRepository _repo;
-  Future<Either<Failure, void>> call() => _repo.leaveMeeting();
+  Future<Either<Failure, void>> call({
+    required String meetingId,
+    required String attendeeId,
+  }) =>
+      _repo.leaveMeeting(
+        meetingId: meetingId,
+        attendeeId: attendeeId,
+      );
+}
+
+class EndMeeting {
+  EndMeeting(this._repo);
+  final VideoCallRepository _repo;
+  Future<Either<Failure, void>> call({required String meetingId}) =>
+      _repo.endMeeting(meetingId: meetingId);
 }
 
 class ToggleAudio {
   ToggleAudio(this._repo);
   final VideoCallRepository _repo;
-  Future<Either<Failure, void>> call(bool enable) =>
-      _repo.toggleAudio(enable: enable);
+  Future<Either<Failure, void>> call({
+    required String meetingId,
+    required String attendeeId,
+    required bool enable,
+  }) =>
+      _repo.toggleAudio(
+        meetingId: meetingId,
+        attendeeId: attendeeId,
+        enable: enable,
+      );
 }
 
 class ToggleVideo {
   ToggleVideo(this._repo);
   final VideoCallRepository _repo;
-  Future<Either<Failure, void>> call(bool enable) =>
-      _repo.toggleVideo(enable: enable);
+  Future<Either<Failure, void>> call({
+    required String meetingId,
+    required String attendeeId,
+    required bool enable,
+  }) =>
+      _repo.toggleVideo(
+        meetingId: meetingId,
+        attendeeId: attendeeId,
+        enable: enable,
+      );
 }
 
 class ToggleScreenShare {
@@ -44,4 +74,20 @@ class ToggleScreenShare {
   final VideoCallRepository _repo;
   Future<Either<Failure, void>> call(bool enable) =>
       _repo.toggleScreenShare(enable: enable);
+}
+
+class GetParticipantStates {
+  GetParticipantStates(this._repo);
+  final VideoCallRepository _repo;
+  Future<Either<Failure, Map<String, dynamic>>> call({
+    required String meetingId,
+  }) =>
+      _repo.getParticipantStates(meetingId: meetingId);
+}
+
+class ClearMeetingCache {
+  ClearMeetingCache(this._repo);
+  final VideoCallRepository _repo;
+  Future<Either<Failure, void>> call({required String meetingId}) =>
+      _repo.clearMeetingCache(meetingId: meetingId);
 }

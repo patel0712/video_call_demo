@@ -83,15 +83,21 @@ void init() {
   final initVideo = InitializeVideoCall(locator());
   final joinVideo = JoinMeeting(locator());
   final leaveVideo = LeaveMeeting(locator());
+  final endVideo = EndMeeting(locator());
+  final clearCache = ClearMeetingCache(locator());
   final toggleAudio = ToggleAudio(locator());
   final toggleVideo = ToggleVideo(locator());
   final toggleShare = ToggleScreenShare(locator());
+  final getParticipantStates = GetParticipantStates(locator());
   locator.registerLazySingleton(() => initVideo);
   locator.registerLazySingleton(() => joinVideo);
   locator.registerLazySingleton(() => leaveVideo);
+  locator.registerLazySingleton(() => endVideo);
+  locator.registerLazySingleton(() => clearCache);
   locator.registerLazySingleton(() => toggleAudio);
   locator.registerLazySingleton(() => toggleVideo);
   locator.registerLazySingleton(() => toggleShare);
+  locator.registerLazySingleton(() => getParticipantStates);
 
   // BLoCs
   final authenticatorWatcherBloc = AuthenticatorWatcherBloc();
@@ -107,9 +113,12 @@ void init() {
     locator<InitializeVideoCall>(),
     locator<JoinMeeting>(),
     locator<LeaveMeeting>(),
+    locator<EndMeeting>(),
+    locator<ClearMeetingCache>(),
     locator<ToggleAudio>(),
     locator<ToggleVideo>(),
     locator<ToggleScreenShare>(),
+    locator<GetParticipantStates>(),
   );
   locator.registerLazySingleton(() => videoCallBloc);
 

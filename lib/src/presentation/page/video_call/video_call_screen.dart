@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:bloc_clean_architecture/src/comman/enum.dart';
 import 'package:bloc_clean_architecture/src/presentation/bloc/video_call/video_call_bloc.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/video_call/chime_meeting_wrapper.dart';
@@ -18,8 +19,7 @@ class VideoCallScreen extends StatefulWidget {
 }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
-  bool _isVideoEnabled = true;
-  bool _isAudioEnabled = true;
+  // Local state variables maintained for app bar and other UI elements
   bool _isScreenSharing = false;
   bool _isConnected = false;
   bool _isConnecting = false;
@@ -46,6 +46,24 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     super.dispose();
   }
 
+  String _generateUUID() {
+    // Generate a proper UUID v4 format
+    final random = Random();
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+    // Create a more random UUID-like string
+    final part1 = (timestamp & 0xffffffff).toRadixString(16).padLeft(8, '0');
+    final part2 = random.nextInt(0xffff).toRadixString(16).padLeft(4, '0');
+    final part3 =
+        (0x4000 | (random.nextInt(0x1000))).toRadixString(16); // Version 4
+    final part4 =
+        (0x8000 | (random.nextInt(0x4000))).toRadixString(16); // Variant bits
+    final part5 =
+        random.nextInt(0xffffffffffff).toRadixString(16).padLeft(12, '0');
+
+    return '$part1-$part2-$part3-$part4-$part5';
+  }
+
   Future<void> _requestPermissions() async {
     final cameraStatus = await Permission.camera.request();
     final microphoneStatus = await Permission.microphone.request();
@@ -63,16 +81,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   Future<void> _joinMeeting() async {
     if (!_isConnecting) {
-      final meetingId =
-          (_meetingIdController.text.isNotEmpty
-                  ? _meetingIdController.text
-                  : (widget.meetingId ?? 'demo-meeting-id'))
-              .trim();
-      final name =
-          (_nameController.text.isNotEmpty
-                  ? _nameController.text
-                  : (widget.participantName ?? 'Guest'))
-              .trim();
+      // Generate a UUID if no meeting ID is provided
+      String meetingId = _meetingIdController.text.isNotEmpty
+          ? _meetingIdController.text.trim()
+          : (widget.meetingId ?? _generateUUID()).trim();
+      final name = (_nameController.text.isNotEmpty
+              ? _nameController.text
+              : (widget.participantName ?? 'Guest'))
+          .trim();
 
       // Show connecting status
       setState(() {
@@ -81,8 +97,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       });
 
       context.read<VideoCallBloc>().add(
-        JoinVideoCall(meetingId: meetingId, participantName: name),
-      );
+            JoinVideoCall(meetingId: meetingId, participantName: name),
+          );
     }
   }
 
@@ -99,12 +115,77 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     Navigator.of(context).pop();
   }
 
+  Future<void> _generateNewMeeting() async {
+    // Generate a new unique meeting ID
+    final newMeetingId = 'meeting-${DateTime.now().millisecondsSinceEpoch}';
+
+    // Clear any existing meeting cache for the old meeting ID
+    if (_meetingIdController.text.isNotEmpty) {
+      try {
+        context.read<VideoCallBloc>().add(
+              ClearMeetingCacheEvent(meetingId: _meetingIdController.text),
+            );
+      } catch (e) {
+        debugPrint('Error clearing meeting cache: $e');
+      }
+    }
+
+    _meetingIdController.text = newMeetingId;
+
+    setState(() {
+      _statusMessage = 'New meeting ID generated';
+    });
+
+    // Show feedback
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('New meeting ID: $newMeetingId'),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
   void _toggleVideo() {
-    context.read<VideoCallBloc>().add(SetVideoEnabled(!_isVideoEnabled));
+    final currentState = context.read<VideoCallBloc>().state;
+    if (currentState.isConnected && currentState.attendeeId != null) {
+      context
+          .read<VideoCallBloc>()
+          .add(SetVideoEnabled(!currentState.isVideoEnabled));
+
+      // Show feedback
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            !currentState.isVideoEnabled ? 'Video enabled' : 'Video disabled',
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor:
+              !currentState.isVideoEnabled ? Colors.green : Colors.orange,
+        ),
+      );
+    }
   }
 
   void _toggleAudio() {
-    context.read<VideoCallBloc>().add(SetAudioEnabled(!_isAudioEnabled));
+    final currentState = context.read<VideoCallBloc>().state;
+    if (currentState.isConnected && currentState.attendeeId != null) {
+      context
+          .read<VideoCallBloc>()
+          .add(SetAudioEnabled(!currentState.isAudioEnabled));
+
+      // Show feedback
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            !currentState.isAudioEnabled ? 'Audio enabled' : 'Audio disabled',
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor:
+              !currentState.isAudioEnabled ? Colors.green : Colors.orange,
+        ),
+      );
+    }
   }
 
   void _toggleScreenShare() {
@@ -145,37 +226,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: _isConnected
-              ? _leaveMeeting
-              : () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          _isConnected ? 'In Call' : 'Video Call',
-          style: GoogleFonts.roboto(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          if (_isConnected)
-            IconButton(
-              icon: const Icon(Icons.call_end, color: Colors.red),
-              onPressed: _leaveMeeting,
-            ),
-        ],
-      ),
       body: BlocConsumer<VideoCallBloc, VideoCallState>(
         listener: (context, state) {
           setState(() {
             _isConnected = state.isConnected;
-            _isAudioEnabled = state.isAudioEnabled;
-            _isVideoEnabled = state.isVideoEnabled;
             _isScreenSharing = state.isScreenSharing;
             _isConnecting = state.state == RequestState.loading;
 
@@ -187,9 +241,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             } else if (state.isConnected) {
               _statusMessage = 'Connected to meeting';
             } else {
-              _statusMessage = state.message.isNotEmpty
-                  ? state.message
-                  : 'Ready to join';
+              _statusMessage =
+                  state.message.isNotEmpty ? state.message : 'Ready to join';
             }
           });
 
@@ -205,15 +258,18 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           }
         },
         builder: (context, state) {
+          debugPrint(
+              '🔄 VideoCall Builder - isConnected: ${state.isConnected}, hasJoinInfo: ${state.joinInfo != null}, state: ${state.state}');
+
           // If connected and we have JoinInfo, render ChimeMeetingWrapper
           if (state.isConnected && state.joinInfo != null) {
             debugPrint('🎬 Rendering ChimeMeetingWrapper with JoinInfo');
+            debugPrint('📋 JoinInfo type: ${state.joinInfo.runtimeType}');
+            debugPrint('📋 JoinInfo details: ${state.joinInfo.toString()}');
             return ChimeMeetingWrapper(joinInfo: state.joinInfo! as JoinInfo);
           }
 
-          debugPrint(
-            'VideoCall State: isConnected=${state.isConnected}, hasJoinInfo=${state.joinInfo != null}, state=${state.state}',
-          );
+          debugPrint('📱 Rendering pre-join UI');
           return Column(
             children: [
               // Video area
@@ -222,125 +278,44 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 child: Container(
                   width: double.infinity,
                   color: Colors.grey[900],
-                  child: _isConnected
-                      ? Stack(
-                          children: [
-                            // Remote video (placeholder)
-                            Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.person,
-                                    size: 100,
-                                    color: Colors.white.withOpacity(0.5),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    widget.participantName ??
-                                        'Remote Participant',
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Remote video will appear here',
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white.withOpacity(0.7),
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Local video (placeholder)
-                            Positioned(
-                              top: 20,
-                              right: 20,
-                              child: Container(
-                                width: 120,
-                                height: 160,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[800],
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.videocam,
-                                      color: _isVideoEnabled
-                                          ? Colors.white
-                                          : Colors.red,
-                                      size: 40,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'You',
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    Text(
-                                      _isVideoEnabled
-                                          ? 'Video On'
-                                          : 'Video Off',
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.white.withOpacity(0.7),
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.videocam,
-                                size: 80,
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Ready to start video call',
-                                style: GoogleFonts.roboto(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                _statusMessage,
-                                style: GoogleFonts.roboto(
-                                  color: Colors.white.withOpacity(0.7),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              if (widget.meetingId != null) ...[
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Meeting ID: ${widget.meetingId ?? state.meetingId}',
-                                  style: GoogleFonts.roboto(
-                                    color: Colors.white.withOpacity(0.7),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ],
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.videocam,
+                          size: 80,
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Ready to start video call',
+                          style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontSize: 18,
                           ),
                         ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _statusMessage,
+                          style: GoogleFonts.roboto(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                        if (widget.meetingId != null) ...[
+                          const SizedBox(height: 16),
+                          Text(
+                            'Meeting ID: ${widget.meetingId ?? state.meetingId}',
+                            style: GoogleFonts.roboto(
+                              color: Colors.white.withOpacity(0.7),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
 
@@ -364,9 +339,143 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       ),
                     ),
 
+                    // Participant status indicator (only show when connected)
+                    if (state.isConnected) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Participants: ${state.participantStates.length}/2',
+                                  style: GoogleFonts.roboto(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                // Show audio/video status for current user
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      state.isAudioEnabled
+                                          ? Icons.mic
+                                          : Icons.mic_off,
+                                      color: state.isAudioEnabled
+                                          ? Colors.green
+                                          : Colors.red,
+                                      size: 14,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(
+                                      state.isVideoEnabled
+                                          ? Icons.videocam
+                                          : Icons.videocam_off,
+                                      color: state.isVideoEnabled
+                                          ? Colors.green
+                                          : Colors.red,
+                                      size: 14,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            // Show other participants
+                            if (state.participantStates.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              Wrap(
+                                spacing: 8,
+                                children: state.participantStates.entries
+                                    .map((entry) {
+                                  final attendeeId = entry.key;
+                                  final participantData =
+                                      entry.value as Map<String, dynamic>? ??
+                                          {};
+                                  final externalUserId =
+                                      participantData['externalUserId']
+                                              as String? ??
+                                          'Unknown';
+                                  final audioEnabled =
+                                      participantData['audioEnabled']
+                                              as bool? ??
+                                          true;
+                                  final videoEnabled =
+                                      participantData['videoEnabled']
+                                              as bool? ??
+                                          true;
+                                  final isLocal =
+                                      attendeeId == state.attendeeId;
+
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: isLocal
+                                          ? Colors.blue[800]
+                                          : Colors.grey[700],
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          isLocal ? 'You' : externalUserId,
+                                          style: GoogleFonts.roboto(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Icon(
+                                          audioEnabled
+                                              ? Icons.mic
+                                              : Icons.mic_off,
+                                          color: audioEnabled
+                                              ? Colors.green
+                                              : Colors.red,
+                                          size: 10,
+                                        ),
+                                        const SizedBox(width: 2),
+                                        Icon(
+                                          videoEnabled
+                                              ? Icons.videocam
+                                              : Icons.videocam_off,
+                                          color: videoEnabled
+                                              ? Colors.green
+                                              : Colors.red,
+                                          size: 10,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
+
                     const SizedBox(height: 16),
 
-                    if (!_isConnected) ...[
+                    if (!state.isConnected) ...[
                       // Pre-join inputs
                       Row(
                         children: [
@@ -392,7 +501,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon:
+                                const Icon(Icons.refresh, color: Colors.white),
+                            onPressed: _generateNewMeeting,
+                            tooltip: 'Generate New Meeting ID',
+                          ),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: TextField(
                               controller: _nameController,
@@ -425,13 +541,15 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Join/Leave button
-                        if (!_isConnected)
+                        if (!state.isConnected)
                           _buildControlButton(
                             icon: Icons.call,
                             label: 'Join',
                             backgroundColor: Colors.green,
-                            onPressed: _isConnecting ? null : _joinMeeting,
-                            isLoading: _isConnecting,
+                            onPressed: state.state == RequestState.loading
+                                ? null
+                                : _joinMeeting,
+                            isLoading: state.state == RequestState.loading,
                           )
                         else
                           _buildControlButton(
@@ -443,48 +561,46 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
                         // Video toggle
                         _buildControlButton(
-                          icon: _isVideoEnabled
+                          icon: state.isVideoEnabled
                               ? Icons.videocam
                               : Icons.videocam_off,
-                          label: _isVideoEnabled ? 'Video' : 'Video Off',
-                          backgroundColor: _isVideoEnabled
-                              ? Colors.white
-                              : Colors.red,
-                          iconColor: _isVideoEnabled
+                          label: state.isVideoEnabled ? 'Video' : 'Video Off',
+                          backgroundColor:
+                              state.isVideoEnabled ? Colors.white : Colors.red,
+                          iconColor: state.isVideoEnabled
                               ? Colors.black
                               : Colors.white,
-                          onPressed: _toggleVideo,
-                          isEnabled: _isConnected,
+                          onPressed: state.isConnected ? _toggleVideo : null,
+                          isEnabled: state.isConnected,
                         ),
 
                         // Audio toggle
                         _buildControlButton(
-                          icon: _isAudioEnabled ? Icons.mic : Icons.mic_off,
-                          label: _isAudioEnabled ? 'Mic' : 'Mic Off',
-                          backgroundColor: _isAudioEnabled
-                              ? Colors.white
-                              : Colors.red,
-                          iconColor: _isAudioEnabled
+                          icon:
+                              state.isAudioEnabled ? Icons.mic : Icons.mic_off,
+                          label: state.isAudioEnabled ? 'Mic' : 'Mic Off',
+                          backgroundColor:
+                              state.isAudioEnabled ? Colors.white : Colors.red,
+                          iconColor: state.isAudioEnabled
                               ? Colors.black
                               : Colors.white,
-                          onPressed: _toggleAudio,
-                          isEnabled: _isConnected,
+                          onPressed: state.isConnected ? _toggleAudio : null,
+                          isEnabled: state.isConnected,
                         ),
 
                         // Screen share toggle
                         _buildControlButton(
-                          icon: _isScreenSharing
+                          icon: state.isScreenSharing
                               ? Icons.stop_screen_share
                               : Icons.screen_share,
-                          label: _isScreenSharing ? 'Stop Share' : 'Share',
-                          backgroundColor: _isScreenSharing
-                              ? Colors.red
-                              : Colors.white,
-                          iconColor: _isScreenSharing
+                          label: state.isScreenSharing ? 'Stop Share' : 'Share',
+                          backgroundColor:
+                              state.isScreenSharing ? Colors.red : Colors.white,
+                          iconColor: state.isScreenSharing
                               ? Colors.white
                               : Colors.black,
                           onPressed: _toggleScreenShare,
-                          isEnabled: _isConnected,
+                          isEnabled: state.isConnected,
                         ),
 
                         // Audio device selection

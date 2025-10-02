@@ -12,7 +12,7 @@ part of 'authenticator_watcher_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AuthenticatorWatcherEvent {
@@ -73,28 +73,35 @@ class _$AuthenticatorWatcherEventCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AuthenticatorWatcherEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$_AuthCheckRequestCopyWith<$Res> {
-  factory _$$_AuthCheckRequestCopyWith(
-          _$_AuthCheckRequest value, $Res Function(_$_AuthCheckRequest) then) =
-      __$$_AuthCheckRequestCopyWithImpl<$Res>;
+abstract class _$$AuthCheckRequestImplCopyWith<$Res> {
+  factory _$$AuthCheckRequestImplCopyWith(_$AuthCheckRequestImpl value,
+          $Res Function(_$AuthCheckRequestImpl) then) =
+      __$$AuthCheckRequestImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_AuthCheckRequestCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherEventCopyWithImpl<$Res, _$_AuthCheckRequest>
-    implements _$$_AuthCheckRequestCopyWith<$Res> {
-  __$$_AuthCheckRequestCopyWithImpl(
-      _$_AuthCheckRequest _value, $Res Function(_$_AuthCheckRequest) _then)
+class __$$AuthCheckRequestImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherEventCopyWithImpl<$Res,
+        _$AuthCheckRequestImpl>
+    implements _$$AuthCheckRequestImplCopyWith<$Res> {
+  __$$AuthCheckRequestImplCopyWithImpl(_$AuthCheckRequestImpl _value,
+      $Res Function(_$AuthCheckRequestImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_AuthCheckRequest implements _AuthCheckRequest {
-  const _$_AuthCheckRequest();
+class _$AuthCheckRequestImpl implements _AuthCheckRequest {
+  const _$AuthCheckRequestImpl();
 
   @override
   String toString() {
@@ -102,9 +109,9 @@ class _$_AuthCheckRequest implements _AuthCheckRequest {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_AuthCheckRequest);
+        (other.runtimeType == runtimeType && other is _$AuthCheckRequestImpl);
   }
 
   @override
@@ -174,28 +181,32 @@ class _$_AuthCheckRequest implements _AuthCheckRequest {
 }
 
 abstract class _AuthCheckRequest implements AuthenticatorWatcherEvent {
-  const factory _AuthCheckRequest() = _$_AuthCheckRequest;
+  const factory _AuthCheckRequest() = _$AuthCheckRequestImpl;
 }
 
 /// @nodoc
-abstract class _$$_SignOutCopyWith<$Res> {
-  factory _$$_SignOutCopyWith(
-          _$_SignOut value, $Res Function(_$_SignOut) then) =
-      __$$_SignOutCopyWithImpl<$Res>;
+abstract class _$$SignOutImplCopyWith<$Res> {
+  factory _$$SignOutImplCopyWith(
+          _$SignOutImpl value, $Res Function(_$SignOutImpl) then) =
+      __$$SignOutImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_SignOutCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherEventCopyWithImpl<$Res, _$_SignOut>
-    implements _$$_SignOutCopyWith<$Res> {
-  __$$_SignOutCopyWithImpl(_$_SignOut _value, $Res Function(_$_SignOut) _then)
+class __$$SignOutImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherEventCopyWithImpl<$Res, _$SignOutImpl>
+    implements _$$SignOutImplCopyWith<$Res> {
+  __$$SignOutImplCopyWithImpl(
+      _$SignOutImpl _value, $Res Function(_$SignOutImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_SignOut implements _SignOut {
-  const _$_SignOut();
+class _$SignOutImpl implements _SignOut {
+  const _$SignOutImpl();
 
   @override
   String toString() {
@@ -203,9 +214,9 @@ class _$_SignOut implements _SignOut {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_SignOut);
+        (other.runtimeType == runtimeType && other is _$SignOutImpl);
   }
 
   @override
@@ -275,7 +286,7 @@ class _$_SignOut implements _SignOut {
 }
 
 abstract class _SignOut implements AuthenticatorWatcherEvent {
-  const factory _SignOut() = _$_SignOut;
+  const factory _SignOut() = _$SignOutImpl;
 }
 
 /// @nodoc
@@ -355,27 +366,34 @@ class _$AuthenticatorWatcherStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AuthenticatorWatcherState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$_InitialCopyWith<$Res> {
-  factory _$$_InitialCopyWith(
-          _$_Initial value, $Res Function(_$_Initial) then) =
-      __$$_InitialCopyWithImpl<$Res>;
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_InitialCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$_Initial>
-    implements _$$_InitialCopyWith<$Res> {
-  __$$_InitialCopyWithImpl(_$_Initial _value, $Res Function(_$_Initial) _then)
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_Initial implements _Initial {
-  const _$_Initial();
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
 
   @override
   String toString() {
@@ -383,9 +401,9 @@ class _$_Initial implements _Initial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Initial);
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
   }
 
   @override
@@ -473,29 +491,32 @@ class _$_Initial implements _Initial {
 }
 
 abstract class _Initial implements AuthenticatorWatcherState {
-  const factory _Initial() = _$_Initial;
+  const factory _Initial() = _$InitialImpl;
 }
 
 /// @nodoc
-abstract class _$$_AuthenticatingCopyWith<$Res> {
-  factory _$$_AuthenticatingCopyWith(
-          _$_Authenticating value, $Res Function(_$_Authenticating) then) =
-      __$$_AuthenticatingCopyWithImpl<$Res>;
+abstract class _$$AuthenticatingImplCopyWith<$Res> {
+  factory _$$AuthenticatingImplCopyWith(_$AuthenticatingImpl value,
+          $Res Function(_$AuthenticatingImpl) then) =
+      __$$AuthenticatingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_AuthenticatingCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$_Authenticating>
-    implements _$$_AuthenticatingCopyWith<$Res> {
-  __$$_AuthenticatingCopyWithImpl(
-      _$_Authenticating _value, $Res Function(_$_Authenticating) _then)
+class __$$AuthenticatingImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$AuthenticatingImpl>
+    implements _$$AuthenticatingImplCopyWith<$Res> {
+  __$$AuthenticatingImplCopyWithImpl(
+      _$AuthenticatingImpl _value, $Res Function(_$AuthenticatingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_Authenticating implements _Authenticating {
-  const _$_Authenticating();
+class _$AuthenticatingImpl implements _Authenticating {
+  const _$AuthenticatingImpl();
 
   @override
   String toString() {
@@ -503,9 +524,9 @@ class _$_Authenticating implements _Authenticating {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Authenticating);
+        (other.runtimeType == runtimeType && other is _$AuthenticatingImpl);
   }
 
   @override
@@ -593,29 +614,32 @@ class _$_Authenticating implements _Authenticating {
 }
 
 abstract class _Authenticating implements AuthenticatorWatcherState {
-  const factory _Authenticating() = _$_Authenticating;
+  const factory _Authenticating() = _$AuthenticatingImpl;
 }
 
 /// @nodoc
-abstract class _$$_AuthenticatedCopyWith<$Res> {
-  factory _$$_AuthenticatedCopyWith(
-          _$_Authenticated value, $Res Function(_$_Authenticated) then) =
-      __$$_AuthenticatedCopyWithImpl<$Res>;
+abstract class _$$AuthenticatedImplCopyWith<$Res> {
+  factory _$$AuthenticatedImplCopyWith(
+          _$AuthenticatedImpl value, $Res Function(_$AuthenticatedImpl) then) =
+      __$$AuthenticatedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_AuthenticatedCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$_Authenticated>
-    implements _$$_AuthenticatedCopyWith<$Res> {
-  __$$_AuthenticatedCopyWithImpl(
-      _$_Authenticated _value, $Res Function(_$_Authenticated) _then)
+class __$$AuthenticatedImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$AuthenticatedImpl>
+    implements _$$AuthenticatedImplCopyWith<$Res> {
+  __$$AuthenticatedImplCopyWithImpl(
+      _$AuthenticatedImpl _value, $Res Function(_$AuthenticatedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_Authenticated implements _Authenticated {
-  const _$_Authenticated();
+class _$AuthenticatedImpl implements _Authenticated {
+  const _$AuthenticatedImpl();
 
   @override
   String toString() {
@@ -623,9 +647,9 @@ class _$_Authenticated implements _Authenticated {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Authenticated);
+        (other.runtimeType == runtimeType && other is _$AuthenticatedImpl);
   }
 
   @override
@@ -713,29 +737,32 @@ class _$_Authenticated implements _Authenticated {
 }
 
 abstract class _Authenticated implements AuthenticatorWatcherState {
-  const factory _Authenticated() = _$_Authenticated;
+  const factory _Authenticated() = _$AuthenticatedImpl;
 }
 
 /// @nodoc
-abstract class _$$_UnauthenticatedCopyWith<$Res> {
-  factory _$$_UnauthenticatedCopyWith(
-          _$_Unauthenticated value, $Res Function(_$_Unauthenticated) then) =
-      __$$_UnauthenticatedCopyWithImpl<$Res>;
+abstract class _$$UnauthenticatedImplCopyWith<$Res> {
+  factory _$$UnauthenticatedImplCopyWith(_$UnauthenticatedImpl value,
+          $Res Function(_$UnauthenticatedImpl) then) =
+      __$$UnauthenticatedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_UnauthenticatedCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$_Unauthenticated>
-    implements _$$_UnauthenticatedCopyWith<$Res> {
-  __$$_UnauthenticatedCopyWithImpl(
-      _$_Unauthenticated _value, $Res Function(_$_Unauthenticated) _then)
+class __$$UnauthenticatedImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$UnauthenticatedImpl>
+    implements _$$UnauthenticatedImplCopyWith<$Res> {
+  __$$UnauthenticatedImplCopyWithImpl(
+      _$UnauthenticatedImpl _value, $Res Function(_$UnauthenticatedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_Unauthenticated implements _Unauthenticated {
-  const _$_Unauthenticated();
+class _$UnauthenticatedImpl implements _Unauthenticated {
+  const _$UnauthenticatedImpl();
 
   @override
   String toString() {
@@ -743,9 +770,9 @@ class _$_Unauthenticated implements _Unauthenticated {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Unauthenticated);
+        (other.runtimeType == runtimeType && other is _$UnauthenticatedImpl);
   }
 
   @override
@@ -833,29 +860,32 @@ class _$_Unauthenticated implements _Unauthenticated {
 }
 
 abstract class _Unauthenticated implements AuthenticatorWatcherState {
-  const factory _Unauthenticated() = _$_Unauthenticated;
+  const factory _Unauthenticated() = _$UnauthenticatedImpl;
 }
 
 /// @nodoc
-abstract class _$$_IsFirstTimeCopyWith<$Res> {
-  factory _$$_IsFirstTimeCopyWith(
-          _$_IsFirstTime value, $Res Function(_$_IsFirstTime) then) =
-      __$$_IsFirstTimeCopyWithImpl<$Res>;
+abstract class _$$IsFirstTimeImplCopyWith<$Res> {
+  factory _$$IsFirstTimeImplCopyWith(
+          _$IsFirstTimeImpl value, $Res Function(_$IsFirstTimeImpl) then) =
+      __$$IsFirstTimeImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_IsFirstTimeCopyWithImpl<$Res>
-    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$_IsFirstTime>
-    implements _$$_IsFirstTimeCopyWith<$Res> {
-  __$$_IsFirstTimeCopyWithImpl(
-      _$_IsFirstTime _value, $Res Function(_$_IsFirstTime) _then)
+class __$$IsFirstTimeImplCopyWithImpl<$Res>
+    extends _$AuthenticatorWatcherStateCopyWithImpl<$Res, _$IsFirstTimeImpl>
+    implements _$$IsFirstTimeImplCopyWith<$Res> {
+  __$$IsFirstTimeImplCopyWithImpl(
+      _$IsFirstTimeImpl _value, $Res Function(_$IsFirstTimeImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthenticatorWatcherState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_IsFirstTime implements _IsFirstTime {
-  const _$_IsFirstTime();
+class _$IsFirstTimeImpl implements _IsFirstTime {
+  const _$IsFirstTimeImpl();
 
   @override
   String toString() {
@@ -863,9 +893,9 @@ class _$_IsFirstTime implements _IsFirstTime {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_IsFirstTime);
+        (other.runtimeType == runtimeType && other is _$IsFirstTimeImpl);
   }
 
   @override
@@ -953,5 +983,5 @@ class _$_IsFirstTime implements _IsFirstTime {
 }
 
 abstract class _IsFirstTime implements AuthenticatorWatcherState {
-  const factory _IsFirstTime() = _$_IsFirstTime;
+  const factory _IsFirstTime() = _$IsFirstTimeImpl;
 }

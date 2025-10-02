@@ -18,6 +18,15 @@ class LeaveVideoCall extends VideoCallEvent {
   const LeaveVideoCall();
 }
 
+class EndVideoCall extends VideoCallEvent {
+  const EndVideoCall();
+}
+
+class ClearMeetingCacheEvent extends VideoCallEvent {
+  const ClearMeetingCacheEvent({required this.meetingId});
+  final String meetingId;
+}
+
 class SetAudioEnabled extends VideoCallEvent {
   const SetAudioEnabled(this.enable);
   final bool enable;
@@ -80,4 +89,8 @@ class VideoTileRemoved extends VideoCallEvent {
   const VideoTileRemoved({required this.attendeeId, required this.tileId});
   final String attendeeId;
   final int tileId;
+}
+
+class FetchParticipantStates extends VideoCallEvent {
+  const FetchParticipantStates();
 }

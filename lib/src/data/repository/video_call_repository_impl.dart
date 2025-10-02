@@ -36,9 +36,15 @@ class VideoCallRepositoryImpl implements VideoCallRepository {
   }
 
   @override
-  Future<Either<Failure, void>> leaveMeeting() async {
+  Future<Either<Failure, void>> leaveMeeting({
+    required String meetingId,
+    required String attendeeId,
+  }) async {
     try {
-      await _remote.leaveMeeting();
+      await _remote.leaveMeeting(
+        meetingId: meetingId,
+        attendeeId: attendeeId,
+      );
       return const Right(null);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -46,9 +52,45 @@ class VideoCallRepositoryImpl implements VideoCallRepository {
   }
 
   @override
-  Future<Either<Failure, void>> toggleAudio({required bool enable}) async {
+  Future<Either<Failure, void>> endMeeting({required String meetingId}) async {
     try {
-      await _remote.toggleAudio(enable: enable);
+      await _remote.endMeeting(meetingId: meetingId);
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleAudio({
+    required String meetingId,
+    required String attendeeId,
+    required bool enable,
+  }) async {
+    try {
+      await _remote.toggleAudio(
+        meetingId: meetingId,
+        attendeeId: attendeeId,
+        enable: enable,
+      );
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleVideo({
+    required String meetingId,
+    required String attendeeId,
+    required bool enable,
+  }) async {
+    try {
+      await _remote.toggleVideo(
+        meetingId: meetingId,
+        attendeeId: attendeeId,
+        enable: enable,
+      );
       return const Right(null);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -68,9 +110,22 @@ class VideoCallRepositoryImpl implements VideoCallRepository {
   }
 
   @override
-  Future<Either<Failure, void>> toggleVideo({required bool enable}) async {
+  Future<Either<Failure, Map<String, dynamic>>> getParticipantStates({
+    required String meetingId,
+  }) async {
     try {
-      await _remote.toggleVideo(enable: enable);
+      final states = await _remote.getParticipantStates(meetingId: meetingId);
+      return Right(states);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> clearMeetingCache(
+      {required String meetingId}) async {
+    try {
+      await _remote.clearMeetingCache(meetingId: meetingId);
       return const Right(null);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

@@ -17,18 +17,20 @@ class VideoCallState {
     this.remoteAttendeeId,
     this.contentAttendeeId,
     this.attendees = const {},
+    this.attendeeId,
+    this.participantStates = const {},
   });
 
   factory VideoCallState.initial() => const VideoCallState(
-    state: RequestState.empty,
-    message: '',
-    isConnected: false,
-    isAudioEnabled: true,
-    isVideoEnabled: true,
-    isScreenSharing: false,
-    meetingId: '',
-    participantName: '',
-  );
+        state: RequestState.empty,
+        message: '',
+        isConnected: false,
+        isAudioEnabled: true,
+        isVideoEnabled: true,
+        isScreenSharing: false,
+        meetingId: '',
+        participantName: '',
+      );
 
   final RequestState state;
   final String message;
@@ -45,6 +47,8 @@ class VideoCallState {
   final String? remoteAttendeeId;
   final String? contentAttendeeId;
   final Map<String, dynamic> attendees;
+  final String? attendeeId;
+  final Map<String, dynamic> participantStates;
 
   VideoCallState copyWith({
     RequestState? state,
@@ -62,6 +66,8 @@ class VideoCallState {
     String? remoteAttendeeId,
     String? contentAttendeeId,
     Map<String, dynamic>? attendees,
+    String? attendeeId,
+    Map<String, dynamic>? participantStates,
   }) {
     return VideoCallState(
       state: state ?? this.state,
@@ -79,6 +85,8 @@ class VideoCallState {
       remoteAttendeeId: remoteAttendeeId ?? this.remoteAttendeeId,
       contentAttendeeId: contentAttendeeId ?? this.contentAttendeeId,
       attendees: attendees ?? this.attendees,
+      attendeeId: attendeeId ?? this.attendeeId,
+      participantStates: participantStates ?? this.participantStates,
     );
   }
 }
