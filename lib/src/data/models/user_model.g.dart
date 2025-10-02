@@ -8,26 +8,66 @@ part of 'user_model.dart';
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+      username: json['username'] as String,
       email: json['email'] as String,
-      firstName: json['first_name'] as String,
-      lastName: json['last_name'] as String,
-      avatar: json['avatar'] as String,
+      phone: json['phone'] as String,
+      website: json['website'] as String,
+      address: Address.fromJson(json['address'] as Map<String, dynamic>),
+      company: Company.fromJson(json['company'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': instance.id,
+      'name': instance.name,
+      'username': instance.username,
       'email': instance.email,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'avatar': instance.avatar,
+      'phone': instance.phone,
+      'website': instance.website,
+      'address': instance.address,
+      'company': instance.company,
+    };
+
+Address _$AddressFromJson(Map<String, dynamic> json) => Address(
+      street: json['street'] as String,
+      suite: json['suite'] as String,
+      city: json['city'] as String,
+      zipcode: json['zipcode'] as String,
+      geo: Geo.fromJson(json['geo'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AddressToJson(Address instance) => <String, dynamic>{
+      'street': instance.street,
+      'suite': instance.suite,
+      'city': instance.city,
+      'zipcode': instance.zipcode,
+      'geo': instance.geo,
+    };
+
+Geo _$GeoFromJson(Map<String, dynamic> json) => Geo(
+      lat: json['lat'] as String,
+      lng: json['lng'] as String,
+    );
+
+Map<String, dynamic> _$GeoToJson(Geo instance) => <String, dynamic>{
+      'lat': instance.lat,
+      'lng': instance.lng,
+    };
+
+Company _$CompanyFromJson(Map<String, dynamic> json) => Company(
+      name: json['name'] as String,
+      catchPhrase: json['catchPhrase'] as String,
+      bs: json['bs'] as String,
+    );
+
+Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{
+      'name': instance.name,
+      'catchPhrase': instance.catchPhrase,
+      'bs': instance.bs,
     };
 
 UsersResponse _$UsersResponseFromJson(Map<String, dynamic> json) =>
     UsersResponse(
-      page: (json['page'] as num).toInt(),
-      perPage: (json['per_page'] as num).toInt(),
-      total: (json['total'] as num).toInt(),
-      totalPages: (json['total_pages'] as num).toInt(),
       data: (json['data'] as List<dynamic>)
           .map((e) => UserModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -35,9 +75,5 @@ UsersResponse _$UsersResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UsersResponseToJson(UsersResponse instance) =>
     <String, dynamic>{
-      'page': instance.page,
-      'per_page': instance.perPage,
-      'total': instance.total,
-      'total_pages': instance.totalPages,
       'data': instance.data,
     };

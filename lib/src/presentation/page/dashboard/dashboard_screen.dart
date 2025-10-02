@@ -73,7 +73,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 20,
+                  crossAxisSpacing: 25,
                   mainAxisSpacing: 20,
                   children: [
                     _buildFeatureCard(
@@ -94,16 +94,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       color: Colors.green,
                       onTap: () {
                         context.pushNamed(AppRoutes.MEETING_INPUT_ROUTE_NAME);
-                      },
-                    ),
-                    _buildFeatureCard(
-                      context,
-                      icon: FontAwesomeIcons.bug,
-                      title: 'Debug Video',
-                      subtitle: 'Test integration',
-                      color: Colors.orange,
-                      onTap: () {
-                        context.push('/video-call-debug');
                       },
                     ),
                   ],
@@ -127,6 +117,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 250,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -139,7 +130,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.zero,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

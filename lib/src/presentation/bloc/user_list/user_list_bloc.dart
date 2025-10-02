@@ -18,74 +18,36 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
         return; // Prevent multiple loads
       }
       emit(state.copyWith(state: RequestState.loading));
-      await _loadUsers(emit, isRefresh: false);
+      await _loadUsers(emit);
     });
 
     on<RefreshUsers>((event, emit) async {
-      _currentPage = 1;
-      _allUsers = [];
-      _hasReachedMax = false;
       emit(state.copyWith(state: RequestState.loading));
-      await _loadUsers(emit, isRefresh: true);
-    });
-
-    on<LoadMoreUsers>((event, emit) async {
-      if (_hasReachedMax) return;
-      if (state.state == RequestState.loaded && state.users.isNotEmpty) {
-        _currentPage++;
-        await _loadUsers(emit, isRefresh: false);
-      }
+      await _loadUsers(emit);
     });
   }
 
   final GetUsers _getUsers;
-  int _currentPage = 1;
-  List<UserEntity> _allUsers = [];
-  bool _hasReachedMax = false;
 
-  Future<void> _loadUsers(
-    Emitter<UserListState> emit, {
-    required bool isRefresh,
-  }) async {
-    final result = await _getUsers.call(_currentPage);
+  Future<void> _loadUsers(Emitter<UserListState> emit) async {
+    final result =
+        await _getUsers.call(1); // Always use page 1 since no pagination
 
     result.fold(
       (Failure failure) {
-        if (isRefresh) {
-          emit(
-            state.copyWith(state: RequestState.error, message: failure.message),
-          );
-        } else {
-          // Keep existing users if available
-          emit(
-            state.copyWith(
-              state: RequestState.error,
-              message: failure.message,
-              cachedUsers: _allUsers.isNotEmpty ? _allUsers : null,
-            ),
-          );
-        }
+        emit(
+          state.copyWith(
+            state: RequestState.error,
+            message: failure.message,
+          ),
+        );
         print("Error =============> $failure");
       },
       (List<UserEntity> users) {
-        if (isRefresh) {
-          _allUsers = List<UserEntity>.from(users);
-        } else {
-          _allUsers.addAll(users);
-        }
-
-        // Check if we've reached the maximum (assuming 10 users per page)
-        _hasReachedMax = users.length < 10;
-
-        // Check if we're offline by seeing if we got cached data
-        final isOffline = users.isNotEmpty && _allUsers.length <= users.length;
-
         emit(
           state.copyWith(
             state: RequestState.loaded,
-            users: _allUsers,
-            hasReachedMax: _hasReachedMax,
-            isOffline: isOffline,
+            users: users,
             message: '',
           ),
         );

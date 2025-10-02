@@ -16,29 +16,54 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1), () {
-      Future.microtask(
-        () => context.read<AuthenticatorWatcherBloc>().add(
-          const AuthenticatorWatcherEvent.authCheckRequest(),
-        ),
-      );
-    });
     super.initState();
+    // Use WidgetsBinding to ensure the widget is fully built before triggering auth check
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Show splash screen for 2.5 seconds before checking auth and navigating
+      Future.delayed(const Duration(milliseconds: 2500), () {
+        if (mounted) {
+          context.read<AuthenticatorWatcherBloc>().add(
+                const AuthenticatorWatcherEvent.authCheckRequest(),
+              );
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticatorWatcherBloc, AuthenticatorWatcherState>(
       listener: (context, state) {
+        if (!mounted) return;
+
         state.maybeMap(
           orElse: () {},
-          authenticating: (_) {},
-          authenticated: (_) {
-            context.replaceNamed(AppRoutes.DASHBOARD_ROUTE_NAME);
+          authenticating: (_) {
+            // Keep showing splash while authenticating
           },
-          isFirstTime: (_) {},
+          authenticated: (_) {
+            // Add a small delay before navigation for smooth transition
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted) {
+                context.replaceNamed(AppRoutes.DASHBOARD_ROUTE_NAME);
+              }
+            });
+          },
+          isFirstTime: (_) {
+            // Add a small delay before navigation for smooth transition
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted) {
+                context.replaceNamed(AppRoutes.LOGIN_ROUTE_NAME);
+              }
+            });
+          },
           unauthenticated: (_) {
-            context.replaceNamed(AppRoutes.LOGIN_ROUTE_NAME);
+            // Add a small delay before navigation for smooth transition
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted) {
+                context.replaceNamed(AppRoutes.LOGIN_ROUTE_NAME);
+              }
+            });
           },
         );
       },
@@ -52,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
               end: Alignment.bottomRight,
               colors: [
                 Theme.of(context).primaryColor,
-                Theme.of(context).primaryColor.withValues(alpha:0.8),
+                Theme.of(context).primaryColor.withValues(alpha: 0.8),
               ],
             ),
           ),
@@ -68,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha:0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -94,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 'Connect with the world',
                 style: GoogleFonts.roboto(
                   fontSize: 16,
-                  color: Colors.white.withValues(alpha:0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
               const SizedBox(height: 50),
@@ -105,10 +130,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
               // Loading text
               Text(
-                'Loading...',
+                'Initializing...',
                 style: GoogleFonts.roboto(
                   fontSize: 14,
-                  color: Colors.white.withValues(alpha:0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
               ),
             ],

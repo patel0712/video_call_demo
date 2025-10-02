@@ -14,16 +14,21 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<UsersResponse> getUsers(int page) async {
     try {
-      final response = await _dio.get<UsersResponse>(
+      final response = await _dio.get<List<dynamic>>(
         '${ApiConstants.baseUrl}/users',
-        // queryParameters: {'page': page, 'per_page': 6},
         options: Options(headers: {'Accept': 'application/json'}),
       );
 
       print("response =====> ${response.data}");
 
-      if (response.statusCode == 200) {
-        return UsersResponse.fromJson(response.data as Map<String, dynamic>);
+      if (response.statusCode == 200 && response.data != null) {
+        // JSONPlaceholder returns a direct array of users, not wrapped in an object
+        final List<UserModel> users = response.data!
+            .map((userJson) =>
+                UserModel.fromJson(userJson as Map<String, dynamic>))
+            .toList();
+
+        return UsersResponse(data: users);
       }
 
       // Surface proper error status codes

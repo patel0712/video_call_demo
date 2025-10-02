@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_aws_chime/models/join_info.model.dart';
 import 'package:flutter_aws_chime/views/meeting.view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_clean_architecture/src/presentation/bloc/video_call/video_call_bloc.dart';
+import '../../../services/chime_screen_share_service.dart';
 
-/// Wrapper widget for AWS Chime MeetingView
-/// This renders the video call interface using the AWS Chime SDK
+/// A widget that wraps the AWS Chime SDK meeting view with additional functionality
+/// like screen sharing and meeting controls
 class ChimeMeetingWrapper extends StatefulWidget {
   final JoinInfo joinInfo;
 
@@ -18,6 +20,7 @@ class ChimeMeetingWrapper extends StatefulWidget {
 
 class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
   Timer? _participantPollingTimer;
+  final ChimeScreenShareService _screenShareService = ChimeScreenShareService();
 
   @override
   void initState() {
@@ -26,10 +29,8 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
     debugPrint('📋 Meeting ID: ${widget.joinInfo.meeting.meetingId}');
     debugPrint('👤 Attendee ID: ${widget.joinInfo.attendee.attendeeId}');
     debugPrint('🌍 Media Region: ${widget.joinInfo.meeting.mediaRegion}');
-    debugPrint(
-        '🔗 Signaling URL: ${widget.joinInfo.meeting.mediaPlacement.signalingUrl}');
 
-    // Start polling for participant states every 3 seconds
+    // Start polling for participant states
     _startParticipantPolling();
   }
 
@@ -55,7 +56,6 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
   void _endCall() {
     debugPrint('🔴 Ending call from ChimeMeetingWrapper');
 
-    // Show confirmation dialog
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -79,7 +79,7 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop();
                 _confirmEndCall();
               },
               child: const Text(
@@ -94,15 +94,11 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
   }
 
   void _confirmEndCall() {
-    // Get the current bloc state to access meeting and attendee IDs
     final bloc = context.read<VideoCallBloc>();
     final state = bloc.state;
 
     if (state.meetingId.isNotEmpty) {
-      // Trigger end meeting event to properly clean up the meeting
       bloc.add(const EndVideoCall());
-
-      // Show feedback
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Ending call...'),
@@ -112,14 +108,58 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
       );
     }
 
-    // Navigate back
     Navigator.of(context).pop();
+  }
+
+  Future<void> _toggleScreenShare(BuildContext context) async {
+    final bloc = context.read<VideoCallBloc>();
+    final state = bloc.state;
+
+    try {
+      if (!state.isScreenSharing) {
+        final success = await _screenShareService.startScreenShare(
+          meetingId: widget.joinInfo.meeting.meetingId,
+          userName: widget.joinInfo.attendee.attendeeId,
+        );
+        if (success) {
+          bloc.add(const SetScreenShareEnabled(true));
+          _showFeedback(context, 'Screen sharing started', Colors.blue);
+        } else {
+          _showFeedback(
+            context,
+            'Could not get screen sharing permission4',
+            Colors.orange,
+          );
+        }
+      } else {
+        await _screenShareService.stopScreenShare();
+        bloc.add(const SetScreenShareEnabled(false));
+        _showFeedback(context, 'Screen sharing stopped', Colors.orange);
+      }
+    } catch (e) {
+      debugPrint('Error toggling screen share: $e');
+      _showFeedback(
+        context,
+        'Failed to ${state.isScreenSharing ? 'stop' : 'start'} screen sharing',
+        Colors.red,
+      );
+    }
+  }
+
+  void _showFeedback(BuildContext context, String message, Color color) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 2),
+          backgroundColor: color,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('🎬 Building ChimeMeetingWrapper UI');
-
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -132,7 +172,7 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
         body: SafeArea(
           child: Column(
             children: [
-              // Header with meeting info
+              // Meeting controls header
               Container(
                 padding: const EdgeInsets.all(16),
                 color: Colors.black87,
@@ -146,7 +186,7 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Video Call',
                             style: TextStyle(
                               color: Colors.white,
@@ -156,7 +196,7 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
                           ),
                           Text(
                             'Meeting: ${widget.joinInfo.meeting.meetingId.substring(0, 8)}...',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white70,
                               fontSize: 12,
                             ),
@@ -164,6 +204,23 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
                         ],
                       ),
                     ),
+                    // Screen share button
+                    BlocBuilder<VideoCallBloc, VideoCallState>(
+                      builder: (context, state) {
+                        return IconButton(
+                          icon: Icon(
+                            state.isScreenSharing
+                                ? Icons.stop_screen_share
+                                : Icons.screen_share,
+                            color: state.isScreenSharing
+                                ? Colors.blue
+                                : Colors.white,
+                          ),
+                          onPressed: () => _toggleScreenShare(context),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 8),
                     IconButton(
                       icon: const Icon(Icons.call_end, color: Colors.red),
                       onPressed: _endCall,
@@ -171,49 +228,11 @@ class _ChimeMeetingWrapperState extends State<ChimeMeetingWrapper> {
                   ],
                 ),
               ),
-              // AWS Chime MeetingView
+              // Meeting view
               Expanded(
                 child: Container(
                   color: Colors.black,
-                  child: Builder(
-                    builder: (context) {
-                      try {
-                        return MeetingView(widget.joinInfo);
-                      } catch (e) {
-                        debugPrint('❌ Error rendering MeetingView: $e');
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.error_outline,
-                                color: Colors.red,
-                                size: 64,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Failed to load video call',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Error: $e',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                  child: MeetingView(widget.joinInfo),
                 ),
               ),
             ],

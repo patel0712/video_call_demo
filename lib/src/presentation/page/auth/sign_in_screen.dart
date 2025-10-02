@@ -37,8 +37,8 @@ class _SignInPageState extends State<SignInPage> {
 
           // Trigger authentication check and redirect to dashboard
           context.read<AuthenticatorWatcherBloc>().add(
-            const AuthenticatorWatcherEvent.authCheckRequest(),
-          );
+                const AuthenticatorWatcherEvent.authCheckRequest(),
+              );
 
           // Navigate to dashboard
           context.go(AppRoutes.DASHBOARD_ROUTE_PATH);
@@ -75,8 +75,8 @@ class _SignInPageState extends State<SignInPage> {
                         prefixIcon: const Icon(Icons.mail),
                         onChanged: (v) {
                           context.read<SignInFormBloc>().add(
-                            SignInFormEvent.emailOnChanged(v),
-                          );
+                                SignInFormEvent.emailOnChanged(v),
+                              );
                         },
                       ),
                       const SizedBox(height: SPACE15),
@@ -99,8 +99,8 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         onChanged: (v) {
                           context.read<SignInFormBloc>().add(
-                            SignInFormEvent.passwordOnChanged(v),
-                          );
+                                SignInFormEvent.passwordOnChanged(v),
+                              );
                         },
                       ),
                       const SizedBox(height: SPACE25),
@@ -110,8 +110,8 @@ class _SignInPageState extends State<SignInPage> {
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             context.read<SignInFormBloc>().add(
-                              const SignInFormEvent.signInWithEmail(),
-                            );
+                                  const SignInFormEvent.signInWithEmail(),
+                                );
                           }
                         },
                         isLoading: (state.state == RequestState.loading)
@@ -181,24 +181,24 @@ class _SignInPageState extends State<SignInPage> {
           Text(
             'Test Credentials:',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
           ),
           const SizedBox(height: 4),
           Text(
             'Email: test@example.com\nPassword: password123',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).primaryColor,
-            ),
+                  color: Theme.of(context).primaryColor,
+                ),
           ),
           const SizedBox(height: 4),
           Text(
             'Or use ReqRes API: eve.holt@reqres.in / cityslicka',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).primaryColor,
-              fontStyle: FontStyle.italic,
-            ),
+                  color: Theme.of(context).primaryColor,
+                  fontStyle: FontStyle.italic,
+                ),
           ),
         ],
       ),
@@ -236,7 +236,8 @@ class _SignInPageState extends State<SignInPage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text('Or sign in with', style: theme.textTheme.bodySmall),
+          child: Text('Or sign in with',
+              style: TextStyle(color: theme.primaryColor)),
         ),
         Expanded(
           child: Container(
@@ -300,8 +301,8 @@ class _SignInPageState extends State<SignInPage> {
           child: Text(
             'Register',
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).primaryColor,
-            ),
+                  color: Theme.of(context).primaryColor,
+                ),
           ),
         ),
       ],

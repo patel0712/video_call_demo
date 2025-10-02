@@ -54,10 +54,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     // Create a more random UUID-like string
     final part1 = (timestamp & 0xffffffff).toRadixString(16).padLeft(8, '0');
     final part2 = random.nextInt(0xffff).toRadixString(16).padLeft(4, '0');
-    final part3 =
-        (0x4000 | (random.nextInt(0x1000))).toRadixString(16); // Version 4
-    final part4 =
-        (0x8000 | (random.nextInt(0x4000))).toRadixString(16); // Variant bits
+    final part3 = (0x4000 | (random.nextInt(0x1000))).toRadixString(
+      16,
+    ); // Version 4
+    final part4 = (0x8000 | (random.nextInt(0x4000))).toRadixString(
+      16,
+    ); // Variant bits
     final part5 =
         random.nextInt(0xffffffffffff).toRadixString(16).padLeft(12, '0');
 
@@ -149,9 +151,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void _toggleVideo() {
     final currentState = context.read<VideoCallBloc>().state;
     if (currentState.isConnected && currentState.attendeeId != null) {
-      context
-          .read<VideoCallBloc>()
-          .add(SetVideoEnabled(!currentState.isVideoEnabled));
+      context.read<VideoCallBloc>().add(
+            SetVideoEnabled(!currentState.isVideoEnabled),
+          );
 
       // Show feedback
       ScaffoldMessenger.of(context).showSnackBar(
@@ -170,9 +172,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void _toggleAudio() {
     final currentState = context.read<VideoCallBloc>().state;
     if (currentState.isConnected && currentState.attendeeId != null) {
-      context
-          .read<VideoCallBloc>()
-          .add(SetAudioEnabled(!currentState.isAudioEnabled));
+      context.read<VideoCallBloc>().add(
+            SetAudioEnabled(!currentState.isAudioEnabled),
+          );
 
       // Show feedback
       ScaffoldMessenger.of(context).showSnackBar(
@@ -259,14 +261,23 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         },
         builder: (context, state) {
           debugPrint(
-              '🔄 VideoCall Builder - isConnected: ${state.isConnected}, hasJoinInfo: ${state.joinInfo != null}, state: ${state.state}');
+            '🔄 VideoCall Builder - isConnected: ${state.isConnected}, hasJoinInfo: ${state.joinInfo != null}, state: ${state.state}',
+          );
 
           // If connected and we have JoinInfo, render ChimeMeetingWrapper
           if (state.isConnected && state.joinInfo != null) {
             debugPrint('🎬 Rendering ChimeMeetingWrapper with JoinInfo');
             debugPrint('📋 JoinInfo type: ${state.joinInfo.runtimeType}');
             debugPrint('📋 JoinInfo details: ${state.joinInfo.toString()}');
-            return ChimeMeetingWrapper(joinInfo: state.joinInfo! as JoinInfo);
+
+            final joinInfo = state.joinInfo;
+            debugPrint('🎬 Rendering ChimeMeetingWrapper with JoinInfo');
+            debugPrint('📋 JoinInfo type: ${joinInfo.runtimeType}');
+            debugPrint('📋 JoinInfo details: $joinInfo');
+
+            if (joinInfo is JoinInfo) {
+              return ChimeMeetingWrapper(joinInfo: joinInfo);
+            }
           }
 
           debugPrint('📱 Rendering pre-join UI');
@@ -344,7 +355,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.grey[800],
                           borderRadius: BorderRadius.circular(16),
@@ -401,8 +414,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                               const SizedBox(height: 4),
                               Wrap(
                                 spacing: 8,
-                                children: state.participantStates.entries
-                                    .map((entry) {
+                                children: state.participantStates.entries.map((
+                                  entry,
+                                ) {
                                   final attendeeId = entry.key;
                                   final participantData =
                                       entry.value as Map<String, dynamic>? ??
@@ -424,7 +438,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
                                   return Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: isLocal
                                           ? Colors.blue[800]
@@ -503,8 +519,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                           ),
                           const SizedBox(width: 8),
                           IconButton(
-                            icon:
-                                const Icon(Icons.refresh, color: Colors.white),
+                            icon: const Icon(
+                              Icons.refresh,
+                              color: Colors.white,
+                            ),
                             onPressed: _generateNewMeeting,
                             tooltip: 'Generate New Meeting ID',
                           ),

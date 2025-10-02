@@ -7,7 +7,6 @@ import 'package:bloc_clean_architecture/src/presentation/page/splash/splash_scre
 import 'package:bloc_clean_architecture/src/presentation/page/user_list/user_list_screen.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/video_call/meeting_input_screen.dart';
 import 'package:bloc_clean_architecture/src/presentation/page/video_call/video_call_screen.dart';
-import 'package:bloc_clean_architecture/src/presentation/page/video_call/video_call_debug_screen.dart';
 import 'package:bloc_clean_architecture/src/utilities/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -89,17 +88,6 @@ GoRouter routerinit = GoRouter(
           meetingId: meetingId,
           participantName: participantName,
         );
-      },
-    ),
-
-    ///  =================================================================
-    /// ********************** Video Call Debug Route ******************************
-    /// ==================================================================
-    GoRoute(
-      name: 'video_call_debug',
-      path: '/video-call-debug',
-      builder: (BuildContext context, GoRouterState state) {
-        return const VideoCallDebugScreen();
       },
     ),
   ],

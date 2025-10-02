@@ -77,13 +77,47 @@ A Flutter application with AWS Chime SDK integration for video calling, user man
 - Dart SDK (>=3.8.0)
 - Android Studio / VS Code
 - Git
+- Node.js and npm (for backend server)
+- AWS Account (for video calling features)
+
+### Quick Setup Guide
+
+#### For Basic App (Without Video Calling)
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd video_call_demo
+   ```
+
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Generate code**
+   ```bash
+   dart run build_runner build
+   ```
+
+4. **Run the app**
+   ```bash
+   flutter run
+   ```
+
+#### For Full Video Calling Setup
+
+1. **Follow the AWS Chime SDK Setup section below**
+2. **Set up the backend server with AWS credentials**
+3. **Configure the Flutter app build.gradle**
+4. **Run both backend and Flutter app**
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd flutter-bloc-clean-architecture-boilerplate
+   cd video_call_demo
    ```
 
 2. **Install dependencies**
@@ -136,35 +170,170 @@ Or use ReqRes API credentials:
 - **Password**: `cityslicka`
 
 ### User List API
-- **Endpoint**: `https://reqres.in/api/users`
-- **Features**: Pagination, offline caching, pull-to-refresh
-- **Cache Duration**: 24 hours
+- **Endpoint**: `https://jsonplaceholder.typicode.com/users`
+- **Features**: Offline caching, pull-to-refresh, user details navigation
+- **Cache Duration**: Persistent until app restart
+- **Data**: 10 sample users with complete profile information
 
 ## AWS Chime SDK Setup
 
 ### Prerequisites
 1. AWS Account with Chime SDK access
-2. Configure AWS credentials
-3. Set up meeting creation backend
+2. AWS IAM user with Chime permissions
+3. Node.js and npm installed
 
-### Configuration Steps
+### Step 1: AWS IAM User Setup
 
-1. **Add AWS credentials** (for production):
-   ```dart
-   // In your backend service
-   final meetingResponse = await createMeeting();
+1. **Create IAM User**:
+   - Go to AWS IAM Console
+   - Create a new user with programmatic access
+   - Attach the following policy or create a custom policy:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "chime:CreateMeeting",
+                "chime:GetMeeting",
+                "chime:DeleteMeeting",
+                "chime:CreateAttendee",
+                "chime:GetAttendee",
+                "chime:DeleteAttendee"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+2. **Get AWS Credentials**:
+   - Note down the Access Key ID and Secret Access Key
+   - You'll need these for the backend server
+
+### Step 2: Backend Server Setup
+
+1. **Navigate to backend directory**:
+   ```bash
+   cd chime-backend
    ```
 
-2. **Initialize Chime SDK**:
-   ```dart
-   // In video call screen
-   await _initializeChimeSDK();
+2. **Install dependencies**:
+   ```bash
+   npm install
    ```
 
-3. **Join meeting**:
-   ```dart
-   await _joinMeeting(meetingId, attendeeId);
+3. **Create .env file**:
+   ```bash
+   # Create .env file in chime-backend folder
+   touch .env
    ```
+
+4. **Add AWS credentials to .env**:
+   ```env
+   AWS_ACCESS_KEY_ID=your_access_key_id_here
+   AWS_SECRET_ACCESS_KEY=your_secret_access_key_here
+   AWS_REGION=us-east-1
+   PORT=5000
+   ```
+
+5. **Start the backend server**:
+   ```bash
+   npm start
+   ```
+
+   The server will start on `http://localhost:5000`
+
+### Step 3: Flutter App Configuration
+
+1. **Update build.gradle** (IMPORTANT):
+   - Open `android/app/build.gradle.kts`
+   - Add namespace for flutter_aws_chime plugin:
+
+```kotlin
+android {
+    namespace = "com.example.bloc_clean_architecture"
+    // ... existing configuration ...
+    
+    // Add this for flutter_aws_chime plugin
+    defaultConfig {
+        // ... existing configuration ...
+        
+        // Required for AWS Chime SDK
+        multiDexEnabled = true
+    }
+    
+    // Add packaging options for AWS Chime
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libjsc.so'
+    }
+}
+```
+
+2. **Update dependencies in pubspec.yaml**:
+   ```yaml
+   dependencies:
+     flutter_aws_chime: ^1.0.0  # or latest version
+   ```
+
+3. **Run the Flutter app**:
+   ```bash
+   cd video_call_demo
+   flutter pub get
+   flutter run
+   ```
+
+### Step 4: Testing Video Calls
+
+1. **Start the backend server** (if not already running):
+   ```bash
+   cd chime-backend
+   npm start
+   ```
+
+2. **Run the Flutter app**:
+   ```bash
+   cd video_call_demo
+   flutter run
+   ```
+
+3. **Test video calling**:
+   - Navigate to Video Call section
+   - Create or join a meeting
+   - Test with multiple devices/emulators
+
+### API Endpoints
+
+The backend server provides the following endpoints:
+
+- `POST /join` - Join or create a meeting
+- `POST /leave` - Leave a meeting
+- `POST /end` - End a meeting
+- `POST /audio/toggle` - Toggle audio on/off
+- `POST /video/toggle` - Toggle video on/off
+- `GET /participants/:meetingId` - Get participant states
+- `GET /health` - Health check
+- `GET /meetings` - List active meetings
+
+### Troubleshooting
+
+1. **Backend server issues**:
+   - Check AWS credentials are correct
+   - Verify IAM permissions
+   - Check server logs for errors
+
+2. **Flutter app issues**:
+   - Ensure backend server is running
+   - Check network connectivity
+   - Verify build.gradle configuration
+
+3. **Video call issues**:
+   - Grant camera and microphone permissions
+   - Test on physical devices
+   - Check AWS Chime SDK logs
 
 ## Permissions
 
@@ -278,21 +447,19 @@ For support and questions:
 - Check the troubleshooting section
 - Review AWS Chime SDK documentation
 
-## Roadmap
-
-### Upcoming Features
-- [ ] Real AWS Chime SDK integration
-- [ ] Push notifications for incoming calls
-- [ ] External camera support
-- [ ] CI/CD pipeline setup
-- [ ] Enhanced error handling
-- [ ] Unit and integration tests
-- [ ] Performance optimization
+### Current Status
+- ✅ Backend server with AWS Chime SDK integration ready
+- ✅ User list with JSONPlaceholder API integration
+- ✅ Authentication flow with splash screen
+- ✅ Clean architecture with BLoC pattern
+- ✅ Offline caching and pull-to-refresh
+- ✅ User details navigation
+- 🔄 Video calling UI ready (needs AWS credentials setup)
 
 ### Known Limitations
-- Video calling is currently a placeholder implementation
-- Screen sharing UI is ready but functionality needs AWS Chime integration
+- Video calling requires AWS credentials setup
 - Authentication is mock-based (suitable for demonstration)
+- Backend server needs to be running for video calls to work
 
 ## Acknowledgments
 

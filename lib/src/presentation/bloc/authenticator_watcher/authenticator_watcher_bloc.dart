@@ -1,4 +1,3 @@
-import 'package:bloc_clean_architecture/main.dart';
 import 'package:bloc_clean_architecture/src/comman/constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -14,17 +13,25 @@ class AuthenticatorWatcherBloc
     on<AuthenticatorWatcherEvent>((event, emit) async {
       await event.map(
         authCheckRequest: (_) async {
-          emit(const AuthenticatorWatcherState.authenticating());
-          final prefs = await SharedPreferences.getInstance();
-          final token = prefs.getString(ACCESS_TOKEN);
-          final showOnbording = prefs.getString(ONBOARDING);
-          if (showOnbording == null) {
-            prefs.setString(ONBOARDING,ONBOARDING);
-            emit(const AuthenticatorWatcherState.isFirstTime());
-          } else 
-          if (token != null) {
-            emit(const AuthenticatorWatcherState.authenticated());
-          } else {
+          try {
+            emit(const AuthenticatorWatcherState.authenticating());
+            final prefs = await SharedPreferences.getInstance();
+            final token = prefs.getString(ACCESS_TOKEN);
+            final showOnboarding = prefs.getString(ONBOARDING);
+
+            if (showOnboarding == null) {
+              // First time user - set onboarding flag and navigate to login
+              await prefs.setString(ONBOARDING, ONBOARDING);
+              emit(const AuthenticatorWatcherState.isFirstTime());
+            } else if (token != null && token.isNotEmpty) {
+              // User has valid token - navigate to dashboard
+              emit(const AuthenticatorWatcherState.authenticated());
+            } else {
+              // User has no valid token - navigate to login
+              emit(const AuthenticatorWatcherState.unauthenticated());
+            }
+          } catch (e) {
+            // If there's any error, default to unauthenticated
             emit(const AuthenticatorWatcherState.unauthenticated());
           }
         },

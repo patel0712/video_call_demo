@@ -21,64 +21,38 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Failure, List<UserEntity>>> getUsers(int page) async {
     try {
-      // Check connectivity
-      final connectivityResults = await _connectivity.checkConnectivity();
-
-      if (connectivityResults == ConnectivityResult.none) {
-        // No internet connection, try to get cached data
-        final cachedUsers = await _localDataSource.getCachedUsers();
-        if (cachedUsers.isNotEmpty) {
-          final userEntities = cachedUsers
-              .map(
-                (user) => UserEntity(
-                  id: user.id,
-                  email: user.email,
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  avatar: user.avatar,
-                ),
-              )
-              .toList();
-          return Right(userEntities);
-        } else {
-          return const Left(ConnectionFailure('No internet connection'));
-        }
-      }
-
-      // Internet connection available, fetch from API
+      // Always try to fetch from API first
       final usersResponse = await _remoteDataSource.getUsers(page);
       final userEntities = usersResponse.data
           .map(
             (user) => UserEntity(
               id: user.id,
+              name: user.name,
+              username: user.username,
               email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              avatar: user.avatar,
+              phone: user.phone,
+              website: user.website,
+              address: AddressEntity(
+                street: user.address.street,
+                suite: user.address.suite,
+                city: user.address.city,
+                zipcode: user.address.zipcode,
+                geo: GeoEntity(
+                  lat: user.address.geo.lat,
+                  lng: user.address.geo.lng,
+                ),
+              ),
+              company: CompanyEntity(
+                name: user.company.name,
+                catchPhrase: user.company.catchPhrase,
+                bs: user.company.bs,
+              ),
             ),
           )
           .toList();
 
-      // Cache strategy:
-      // - If first page, overwrite cache
-      // - If subsequent pages, merge with existing cached users (dedupe by id)
-      if (page <= 1) {
-        await _localDataSource.cacheUsers(usersResponse.data);
-      } else {
-        try {
-          final cached = await _localDataSource.getCachedUsers();
-          final Map<int, UserModel> idToUser = {
-            for (final u in cached) u.id: u,
-          };
-          for (final u in usersResponse.data) {
-            idToUser[u.id] = u;
-          }
-          await _localDataSource.cacheUsers(idToUser.values.toList());
-        } catch (_) {
-          // If merging fails, fall back to caching the latest page only
-          await _localDataSource.cacheUsers(usersResponse.data);
-        }
-      }
+      // Cache the fresh data
+      await _localDataSource.cacheUsers(usersResponse.data);
 
       return Right(userEntities);
     } catch (e) {
@@ -90,10 +64,26 @@ class UserRepositoryImpl implements UserRepository {
               .map(
                 (user) => UserEntity(
                   id: user.id,
+                  name: user.name,
+                  username: user.username,
                   email: user.email,
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  avatar: user.avatar,
+                  phone: user.phone,
+                  website: user.website,
+                  address: AddressEntity(
+                    street: user.address.street,
+                    suite: user.address.suite,
+                    city: user.address.city,
+                    zipcode: user.address.zipcode,
+                    geo: GeoEntity(
+                      lat: user.address.geo.lat,
+                      lng: user.address.geo.lng,
+                    ),
+                  ),
+                  company: CompanyEntity(
+                    name: user.company.name,
+                    catchPhrase: user.company.catchPhrase,
+                    bs: user.company.bs,
+                  ),
                 ),
               )
               .toList();

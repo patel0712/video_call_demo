@@ -27,6 +27,7 @@ dependencies:
   bloc_concurrency: ^0.2.5
   # Video calling dependencies
   flutter_aws_chime: ^1.0.0
+  flutter_webrtc: ^1.2.0
   permission_handler: ^11.0.1
   cached_network_image: ^3.3.0
   connectivity_plus: ^5.0.1

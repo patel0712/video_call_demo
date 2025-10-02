@@ -15,8 +15,3 @@ class GetUsersEvent extends UserListEvent {
 class RefreshUsers extends UserListEvent {
   const RefreshUsers();
 }
-
-class LoadMoreUsers extends UserListEvent {
-  const LoadMoreUsers();
-}
-
